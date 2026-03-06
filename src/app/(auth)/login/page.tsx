@@ -51,12 +51,6 @@ export default function LoginPage() {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor="password">Kata Sandi</Label>
-              <Link
-                href="/forgot-password"
-                className="text-xs text-primary hover:underline underline-offset-4 transition-colors"
-              >
-                Lupa kata sandi?
-              </Link>
             </div>
             <PasswordInput
               id="password"

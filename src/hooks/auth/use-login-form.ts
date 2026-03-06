@@ -21,29 +21,28 @@ export function useLoginForm() {
   });
 
   async function onSubmit(values: LoginInput) {
+    // toast.loading di luar startTransition supaya langsung render
+    const toastId = toast.loading("Memproses login...");
+
     startTransition(async () => {
-      await toast.promise(
-        (async () => {
-          const result = await signIn("credentials", {
-            email: values.email,
-            password: values.password,
-            redirect: false,
-          });
+      try {
+        const result = await signIn("credentials", {
+          email: values.email,
+          password: values.password,
+          redirect: false,
+        });
 
-          if (result?.error) {
-            throw new Error("Email atau kata sandi salah.");
-          }
+        if (!result?.ok || result?.error) {
+          toast.error("Email atau kata sandi salah.", { id: toastId });
+          return;
+        }
 
-        })(),
-        {
-          loading: "Memproses login...",
-          success: "Berhasil masuk!",
-          error: (err: Error) => err.message ?? "Terjadi kesalahan.",
-        },
-      );
-      
-      router.push("/dashboard");
-      router.refresh();
+        toast.success("Berhasil masuk!", { id: toastId });
+        router.push("/admin");
+        router.refresh();
+      } catch {
+        toast.error("Terjadi kesalahan, coba lagi.", { id: toastId });
+      }
     });
   }
 

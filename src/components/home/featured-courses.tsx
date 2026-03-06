@@ -118,7 +118,7 @@ export function FeaturedCourses() {
               />
 
               {/* Thumbnail */}
-              <div className="relative aspect-[16/9] overflow-hidden bg-muted">
+              <div className="relative aspect-video overflow-hidden bg-muted">
                 <Image
                   src={course.image}
                   alt={course.title}
