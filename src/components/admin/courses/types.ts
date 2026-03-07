@@ -1,18 +1,16 @@
 export type CourseStatus = "published" | "draft";
 
 export interface Course {
-  id: number;
+  id: string;
   title: string;
-  category: string;
-  instructor: string;
+  description?: string;
   students: number;
   lessons: number;
-  duration: string;
   rating: number;
   isFree: boolean;
   status: CourseStatus;
+  sortOrder?: number;
   thumbnail: string | null;
-  color: string;
   updatedAt: string;
 }
 
@@ -29,16 +27,6 @@ export const STATUS_CONFIG: Record<
     className: "bg-amber-500/10 text-amber-600 border-amber-500/20",
   },
 };
-
-export const CATEGORIES = [
-  "Semua",
-  "Frontend",
-  "Backend",
-  "Design",
-  "Data Science",
-  "Mobile",
-  "Marketing",
-] as const;
 
 export const STATUS_FILTERS = [
   { value: "Semua", label: "Semua" },

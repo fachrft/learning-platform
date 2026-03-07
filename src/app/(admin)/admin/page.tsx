@@ -1,6 +1,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Users, BookOpen, CreditCard, TrendingUp, Bell } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const stats = [
   {
@@ -87,10 +88,7 @@ export default function AdminDashboardPage() {
             Selamat datang kembali, Admin.
           </p>
         </div>
-        <button className="relative rounded-full p-2 hover:bg-muted transition-colors">
-          <Bell className="h-4 w-4 text-muted-foreground" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary" />
-        </button>
+        <ThemeToggle />
       </header>
 
       {/* Content */}

@@ -3,6 +3,7 @@ import { Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
+import { QueryProvider } from "@/components/query-provider";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -31,8 +32,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="flex-1">{children}</main>
-          <Toaster />
+          <QueryProvider>
+            <main className="flex-1">{children}</main>
+            <Toaster />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -9,10 +9,11 @@ import {
   primaryKey,
   unique,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { Users } from "./users";
 
-export const courseStatusEnum = pgEnum("status", ["draft", "published"]);
-export const lessonTypeEnum = pgEnum("type", ["video", "text", "quiz"]);
+export const courseStatusEnum = pgEnum("status_course", ["draft", "published"]);
+export const lessonTypeEnum = pgEnum("type_lesson", ["video", "text", "quiz"]);
 
 export const Courses = pgTable("courses", {
   id: varchar().primaryKey().notNull(),
@@ -89,7 +90,6 @@ export const UserProgress = pgTable(
   (t) => [unique().on(t.userId, t.lessonId)],
 );
 
-
 export const CourseReviews = pgTable(
   "course_reviews",
   {
@@ -108,3 +108,61 @@ export const CourseReviews = pgTable(
 
   (t) => [unique().on(t.userId, t.courseId)],
 );
+
+export const coursesRelations = relations(Courses, ({ many }) => ({
+  course_enrollments: many(CourseEnrollments),
+  course_reviews: many(CourseReviews),
+  chapters: many(Chapters),
+}));
+
+export const chaptersRelations = relations(Chapters, ({ one, many }) => ({
+  course: one(Courses, {
+    fields: [Chapters.courseId],
+    references: [Courses.id],
+  }),
+  lessons: many(Lessons),
+}));
+
+export const lessonsRelations = relations(Lessons, ({ one, many }) => ({
+  chapter: one(Chapters, {
+    fields: [Lessons.chapterId],
+    references: [Chapters.id],
+  }),
+  user_progress: many(UserProgress),
+}));
+
+export const courseEnrollmentsRelations = relations(
+  CourseEnrollments,
+  ({ one }) => ({
+    course: one(Courses, {
+      fields: [CourseEnrollments.courseId],
+      references: [Courses.id],
+    }),
+    user: one(Users, {
+      fields: [CourseEnrollments.userId],
+      references: [Users.id],
+    }),
+  }),
+);
+
+export const courseReviewsRelations = relations(CourseReviews, ({ one }) => ({
+  course: one(Courses, {
+    fields: [CourseReviews.courseId],
+    references: [Courses.id],
+  }),
+  user: one(Users, {
+    fields: [CourseReviews.userId],
+    references: [Users.id],
+  }),
+}));
+
+export const userProgressRelations = relations(UserProgress, ({ one }) => ({
+  lesson: one(Lessons, {
+    fields: [UserProgress.lessonId],
+    references: [Lessons.id],
+  }),
+  user: one(Users, {
+    fields: [UserProgress.userId],
+    references: [Users.id],
+  }),
+}));

@@ -6,12 +6,10 @@ export default withAuth(
     const { pathname } = req.nextUrl;
     const role = req.nextauth.token?.role as string | undefined;
 
-    // Student coba akses /admin → tolak
     if (pathname.startsWith("/admin") && role !== "admin") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    // Admin akses /dashboard → arahkan ke /admin
     if (pathname === "/dashboard" && role === "admin") {
       return NextResponse.redirect(new URL("/admin", req.url));
     }
@@ -30,9 +28,7 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    "/dashboard", // ← eksplisit tanpa trailing
     "/dashboard/:path*",
-    "/admin", // ← eksplisit tanpa trailing
     "/admin/:path*",
     "/courses/:path*",
     "/profile/:path*",

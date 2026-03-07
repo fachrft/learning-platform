@@ -32,65 +32,57 @@ vi.mock("bcrypt", () => ({
 // ============================================================
 import { db } from "@/db";
 
-// ============================================================
-// Test cases
-// ============================================================
 describe("registerAction", () => {
-  // Reset semua mock sebelum tiap test biar tidak saling pengaruh
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Default mock: email belum terdaftar
     vi.mocked(db.query.Users.findFirst).mockResolvedValue(undefined);
     vi.mocked(db.insert).mockReturnValue({
       values: vi.fn().mockResolvedValue(undefined),
     } as any);
   });
 
-  // ---- Validasi Zod (tidak sampai DB) ----
-
   it("throw error jika nama terlalu pendek", async () => {
-    await expect(
-      registerAction({
-        name: "A",
-        email: "budi@email.com",
-        password: "password123",
-        confirmPassword: "password123",
-      }),
-    ).rejects.toThrow("Nama minimal 2 karakter.");
+    const result = await registerAction({
+      name: "A",
+      email: "budi@email.com",
+      password: "password123",
+      confirmPassword: "password123",
+    });
+    expect(result.success).toBe(false);
+    expect(result.error).toContain("Nama minimal 2 karakter.");
   });
 
   it("throw error jika email tidak valid", async () => {
-    await expect(
-      registerAction({
-        name: "Budi",
-        email: "bukan-email",
-        password: "password123",
-        confirmPassword: "password123",
-      }),
-    ).rejects.toThrow();
+    const result = await registerAction({
+      name: "Budi",
+      email: "bukan-email",
+      password: "password123",
+      confirmPassword: "password123",
+    });
+    expect(result.success).toBe(false);
   });
 
   it("throw error jika password kurang dari 8 karakter", async () => {
-    await expect(
-      registerAction({
-        name: "Budi",
-        email: "budi@email.com",
-        password: "abc",
-        confirmPassword: "abc",
-      }),
-    ).rejects.toThrow("Kata sandi minimal 8 karakter.");
+    const result = await registerAction({
+      name: "Budi",
+      email: "budi@email.com",
+      password: "abc",
+      confirmPassword: "abc",
+    });
+    expect(result.success).toBe(false);
+    expect(result.error).toContain("Kata sandi minimal 8 karakter.");
   });
 
   it("throw error jika confirmPassword tidak cocok", async () => {
-    await expect(
-      registerAction({
-        name: "Budi",
-        email: "budi@email.com",
-        password: "password123",
-        confirmPassword: "salah123",
-      }),
-    ).rejects.toThrow("Konfirmasi kata sandi tidak cocok.");
+    const result = await registerAction({
+      name: "Budi",
+      email: "budi@email.com",
+      password: "password123",
+      confirmPassword: "salah123",
+    });
+    expect(result.success).toBe(false);
+    expect(result.error).toContain("Konfirmasi kata sandi tidak cocok.");
   });
 
   // ---- Logika DB ----
@@ -107,25 +99,25 @@ describe("registerAction", () => {
       updatedAt: new Date(),
     });
 
-    await expect(
-      registerAction({
-        name: "Budi",
-        email: "budi@email.com",
-        password: "password123",
-        confirmPassword: "password123",
-      }),
-    ).rejects.toThrow("Email ini sudah terdaftar. Silakan login.");
+    const result = await registerAction({
+      name: "Budi",
+      email: "budi@email.com",
+      password: "password123",
+      confirmPassword: "password123",
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe("Email ini sudah terdaftar. Silakan login.");
   });
 
   it("berhasil register jika data valid dan email belum terdaftar", async () => {
     // Default mock sudah return null (email belum ada)
-    await expect(
-      registerAction({
-        name: "Budi Santoso",
-        email: "budi@email.com",
-        password: "password123",
-        confirmPassword: "password123",
-      }),
-    ).resolves.toBeUndefined(); // fungsi return void (tidak throw)
+    const result = await registerAction({
+      name: "Budi Santoso",
+      email: "budi@email.com",
+      password: "password123",
+      confirmPassword: "password123",
+    });
+    expect(result.success).toBe(true);
   });
 });

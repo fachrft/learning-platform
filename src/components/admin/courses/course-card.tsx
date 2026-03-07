@@ -31,7 +31,7 @@ export function CourseCard({
   return (
     <div className="group relative bg-card border border-border/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
       {/* ── Thumbnail ── */}
-      <div className="relative h-44 bg-muted overflow-hidden">
+      <div className="relative aspect-video w-full bg-muted overflow-hidden">
         {course.thumbnail ? (
           <>
             <Image
@@ -46,7 +46,7 @@ export function CourseCard({
           </>
         ) : (
           /* Fallback gradient */
-          <div className={`absolute inset-0 bg-linear-to-br ${course.color}`} />
+          <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-purple-500/20" />
         )}
 
         {/* Status badge — top right */}
@@ -54,11 +54,6 @@ export function CourseCard({
           className={`absolute top-3 right-3 text-[10px] font-semibold px-2.5 py-1 rounded-full border backdrop-blur-sm ${status.className}`}
         >
           {status.label}
-        </span>
-
-        {/* Category badge — top left */}
-        <span className="absolute top-3 left-3 text-[10px] font-semibold px-2.5 py-1 rounded-full bg-black/40 text-white backdrop-blur-sm">
-          {course.category}
         </span>
 
         {/* Free / Premium badge — bottom left */}
@@ -89,10 +84,6 @@ export function CourseCard({
           <span className="flex items-center gap-1">
             <BookOpen className="h-3.5 w-3.5" />
             {course.lessons} lessons
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5" />
-            {course.duration}
           </span>
         </div>
       </div>

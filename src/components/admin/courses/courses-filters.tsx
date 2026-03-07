@@ -1,15 +1,14 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { CATEGORIES, STATUS_FILTERS } from "./types";
+import { STATUS_FILTERS } from "./types";
+import { Input } from "@/components/ui/input";
 
 interface CoursesFiltersProps {
   search: string;
   onSearchChange: (value: string) => void;
   activeStatus: string;
   onStatusChange: (value: string) => void;
-  activeCategory: string;
-  onCategoryChange: (value: string) => void;
 }
 
 export function CoursesFilters({
@@ -17,8 +16,6 @@ export function CoursesFilters({
   onSearchChange,
   activeStatus,
   onStatusChange,
-  activeCategory,
-  onCategoryChange,
 }: CoursesFiltersProps) {
   return (
     <div className="space-y-3">
@@ -27,7 +24,7 @@ export function CoursesFilters({
         {/* Search Input */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
+          <Input
             type="text"
             placeholder="Cari kursus atau instruktur..."
             value={search}
@@ -52,23 +49,6 @@ export function CoursesFilters({
             </button>
           ))}
         </div>
-      </div>
-
-      {/* Category Tabs (horizontal scroll) */}
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => onCategoryChange(cat)}
-            className={`text-xs px-3.5 py-1.5 rounded-full font-medium whitespace-nowrap transition-all shrink-0 ${
-              activeCategory === cat
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "border border-border/60 text-muted-foreground hover:border-primary/40 hover:text-foreground"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
       </div>
     </div>
   );

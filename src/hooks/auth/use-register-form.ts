@@ -26,9 +26,13 @@ export function useRegisterForm() {
     const toastId = toast.loading("Mendaftarkan akun...");
     startTransition(async () => {
       try {
-        await registerAction(values);
-        toast.success("Akun berhasil dibuat!", { id: toastId });
-        router.push("/login");
+        const result = await registerAction(values);
+        if (result?.success) {
+          toast.success("Akun berhasil dibuat!", { id: toastId });
+          router.push("/login");
+        } else {
+          toast.error(result?.error || "Gagal mendaftar.", { id: toastId });
+        }
       } catch (error) {
         toast.error("Terjadi kesalahan, coba lagi.", { id: toastId });
       }

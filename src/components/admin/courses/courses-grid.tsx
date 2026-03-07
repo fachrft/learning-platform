@@ -6,6 +6,7 @@ import { AddCourseCard } from "./add-course-card";
 
 interface CoursesGridProps {
   courses: Course[];
+  isLoading?: boolean;
   onAddCourse?: () => void;
   onViewCourse?: (course: Course) => void;
   onEditCourse?: (course: Course) => void;
@@ -15,12 +16,25 @@ interface CoursesGridProps {
 
 export function CoursesGrid({
   courses,
+  isLoading,
   onAddCourse,
   onViewCourse,
   onEditCourse,
   onDeleteCourse,
   onResetFilters,
 }: CoursesGridProps) {
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="h-[340px] rounded-2xl bg-muted animate-pulse"
+          />
+        ))}
+      </div>
+    );
+  }
   if (courses.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4">
