@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { Courses } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import { CourseInput, courseSchema } from "@/schemas/course.schema";
 import { slugify } from "@/lib/utils";
 import { getServerSession } from "next-auth";
@@ -12,6 +12,7 @@ import { deleteImageKitFileByUrl } from "@/lib/imagekit";
 export async function getCoursesAction() {
   try {
     const courses = await db.query.Courses.findMany({
+      orderBy: [asc(Courses.createdAt)],
       with: {
         course_enrollments: true,
         course_reviews: true,
@@ -100,21 +101,21 @@ export async function updateCourseAction(id: string, data: CourseInput) {
         console.error,
       );
     }
-    const slug = `${slugify(title)}-${id.slice(0, 6)}`;
+    const updateData: any = {
+      title,
+      description,
+      thumbnail,
+      status,
+      isFree,
+      sortOrder,
+      updatedAt: new Date(),
+    };
 
-    await db
-      .update(Courses)
-      .set({
-        title,
-        slug,
-        description,
-        thumbnail,
-        status,
-        isFree,
-        sortOrder,
-        updatedAt: new Date(),
-      })
-      .where(eq(Courses.id, id));
+    if (existingCourse.title !== title) {
+      updateData.slug = `${slugify(title)}-${id.slice(0, 6)}`;
+    }
+
+    await db.update(Courses).set(updateData).where(eq(Courses.id, id));
 
     return { success: true };
   } catch (error) {

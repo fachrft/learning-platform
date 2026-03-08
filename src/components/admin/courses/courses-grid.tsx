@@ -8,7 +8,6 @@ interface CoursesGridProps {
   courses: Course[];
   isLoading?: boolean;
   onAddCourse?: () => void;
-  onViewCourse?: (course: Course) => void;
   onEditCourse?: (course: Course) => void;
   onDeleteCourse?: (course: Course) => void;
   onResetFilters?: () => void;
@@ -18,7 +17,6 @@ export function CoursesGrid({
   courses,
   isLoading,
   onAddCourse,
-  onViewCourse,
   onEditCourse,
   onDeleteCourse,
   onResetFilters,
@@ -66,7 +64,6 @@ export function CoursesGrid({
           <CourseCard
             key={course.id}
             course={course}
-            onView={onViewCourse}
             onEdit={onEditCourse}
             onDelete={onDeleteCourse}
           />

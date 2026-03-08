@@ -1,0 +1,25 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { getLessonBySlug } from "@/actions/lessons";
+
+export function useLesson(lessonSlug: string) {
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["lesson", lessonSlug],
+    queryFn: async () => {
+      const result = await getLessonBySlug(lessonSlug);
+      if (!result.success) {
+        throw new Error(result.error || "Gagal mengambil data materi.");
+      }
+      return result.lesson;
+    },
+    enabled: !!lessonSlug,
+  });
+
+  return {
+    lesson: data,
+    isLoading,
+    error: error instanceof Error ? error.message : null,
+    refetch,
+  };
+}

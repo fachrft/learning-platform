@@ -1,3 +1,12 @@
+import Imagekit from 'imagekit'
+
+export const imagekit = new Imagekit({
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
+  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
+  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!
+})
+
+
 export async function deleteImageKitFileByUrl(url: string | null | undefined) {
   if (!url) return;
   try {

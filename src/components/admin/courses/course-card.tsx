@@ -1,35 +1,24 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
-import {
-  BookOpen,
-  Clock,
-  Eye,
-  Lock,
-  Pencil,
-  Star,
-  Trash2,
-  Users,
-} from "lucide-react";
+import { BookOpen, Lock, Pencil, Star, Trash2, Users } from "lucide-react";
 import { Course, STATUS_CONFIG } from "./types";
 
 interface CourseCardProps {
   course: Course;
-  onView?: (course: Course) => void;
   onEdit?: (course: Course) => void;
   onDelete?: (course: Course) => void;
 }
 
-export function CourseCard({
-  course,
-  onView,
-  onEdit,
-  onDelete,
-}: CourseCardProps) {
+export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
   const status = STATUS_CONFIG[course.status];
 
   return (
-    <div className="group relative bg-card border border-border/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+    <Link
+      href={`/admin/courses/${course.slug}`}
+      className="group relative block bg-card border border-border/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+    >
       {/* ── Thumbnail ── */}
       <div className="relative aspect-video w-full bg-muted overflow-hidden">
         {course.thumbnail ? (
@@ -107,21 +96,22 @@ export function CourseCard({
         {/* Action buttons */}
         <div className="flex items-center gap-1">
           <button
-            onClick={() => onView?.(course)}
-            className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-            title="Lihat kursus"
-          >
-            <Eye className="h-3.5 w-3.5" />
-          </button>
-          <button
-            onClick={() => onEdit?.(course)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onEdit?.(course);
+            }}
             className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
             title="Edit kursus"
           >
             <Pencil className="h-3.5 w-3.5" />
           </button>
           <button
-            onClick={() => onDelete?.(course)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onDelete?.(course);
+            }}
             className="p-1.5 rounded-lg hover:bg-destructive/10 transition-colors text-muted-foreground hover:text-destructive"
             title="Hapus kursus"
           >
@@ -134,6 +124,6 @@ export function CourseCard({
       <p className="px-4 pb-3 text-[11px] text-muted-foreground -mt-1">
         Diupdate {course.updatedAt}
       </p>
-    </div>
+    </Link>
   );
 }

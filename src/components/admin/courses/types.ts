@@ -2,6 +2,7 @@ export type CourseStatus = "published" | "draft";
 
 export interface Course {
   id: string;
+  slug: string;
   title: string;
   description?: string;
   students: number;

@@ -2,19 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { ArrowUpRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRegisterForm } from "@/hooks/auth/use-register-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 export default function RegisterPage() {
   const { form, onSubmit, isPending } = useRegisterForm();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = form;
 
   return (
     <div className="w-full space-y-8">
@@ -27,92 +29,110 @@ export default function RegisterPage() {
 
       {/* Form Card */}
       <div className="bg-card border border-border/50 rounded-2xl shadow-lg p-8 space-y-6">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Nama Lengkap */}
-          <div className="space-y-2">
-            <Label htmlFor="name">Nama Lengkap</Label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="Nama Lengkap"
-              autoComplete="name"
-              className={`h-10 ${errors.name ? "border-destructive focus-visible:ring-destructive/30" : ""}`}
-              {...register("name")}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            {/* Nama Lengkap */}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nama Lengkap</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Nama Lengkap"
+                      autoComplete="name"
+                      className="h-10"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.name && (
-              <p className="text-xs text-destructive">{errors.name.message}</p>
-            )}
-          </div>
 
-          {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email">Alamat Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="kamu@email.com"
-              autoComplete="email"
-              className={`h-10 ${errors.email ? "border-destructive focus-visible:ring-destructive/30" : ""}`}
-              {...register("email")}
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Alamat Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="kamu@email.com"
+                      autoComplete="email"
+                      className="h-10"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
-            )}
-          </div>
 
-          {/* Password */}
-          <div className="space-y-2">
-            <Label htmlFor="password">Kata Sandi</Label>
-            <PasswordInput
-              id="password"
-              placeholder="Minimal 8 karakter"
-              autoComplete="new-password"
-              className={`h-10 ${errors.password ? "border-destructive focus-visible:ring-destructive/30" : ""}`}
-              {...register("password")}
+            {/* Password */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Kata Sandi</FormLabel>
+                  <FormControl>
+                    <PasswordInput
+                      placeholder="Minimal 8 karakter"
+                      autoComplete="new-password"
+                      className="h-10"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.password && (
-              <p className="text-xs text-destructive">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
 
-          {/* Confirm Password */}
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Konfirmasi Kata Sandi</Label>
-            <PasswordInput
-              id="confirmPassword"
-              placeholder="Ulangi kata sandi"
-              autoComplete="new-password"
-              className={`h-10 ${errors.confirmPassword ? "border-destructive focus-visible:ring-destructive/30" : ""}`}
-              {...register("confirmPassword")}
+            {/* Confirm Password */}
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Konfirmasi Kata Sandi</FormLabel>
+                  <FormControl>
+                    <PasswordInput
+                      placeholder="Ulangi kata sandi"
+                      autoComplete="new-password"
+                      className="h-10"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.confirmPassword && (
-              <p className="text-xs text-destructive">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
 
-          <Button
-            type="submit"
-            size="lg"
-            className="w-full h-11 rounded-full font-semibold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 transition-all group"
-            disabled={isPending}
-          >
-            {isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Mendaftarkan...
-              </>
-            ) : (
-              <>
-                Daftar Sekarang
-                <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </>
-            )}
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-11 rounded-full font-semibold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 transition-all group mt-2"
+              disabled={isPending}
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Mendaftarkan...
+                </>
+              ) : (
+                <>
+                  Daftar Sekarang
+                  <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </>
+              )}
+            </Button>
+          </form>
+        </Form>
       </div>
 
       {/* Footer link */}
