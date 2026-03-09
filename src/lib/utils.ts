@@ -14,3 +14,13 @@ export function slugify(text: string) {
     .replace(/[^\w\-]+/g, "")
     .replace(/\-\-+/g, "-");
 }
+export function getAverageRating(reviews: any[]) {
+  if (!reviews || reviews.length === 0) return 0;
+
+  const sum = reviews.reduce((acc, curr) => {
+    const val = typeof curr === "number" ? curr : (curr?.rating ?? 0);
+    return acc + val;
+  }, 0);
+
+  return sum / reviews.length;
+}

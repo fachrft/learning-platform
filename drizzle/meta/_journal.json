@@ -8,6 +8,13 @@
       "when": 1772891494710,
       "tag": "0000_fresh_scarecrow",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773041560537,
+      "tag": "0001_cooing_zaladane",
+      "breakpoints": true
     }
   ]
 }

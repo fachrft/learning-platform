@@ -21,7 +21,6 @@ export function useLoginForm() {
   });
 
   async function onSubmit(values: LoginInput) {
-    // toast.loading di luar startTransition supaya langsung render
     const toastId = toast.loading("Memproses login...");
 
     startTransition(async () => {

@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             name: user.name,
             role: user.role,
+            subscription: user.subscription,
           };
         } catch (error) {
           console.error("[authorize error]", error);
@@ -44,16 +45,34 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      // Saat pertama login — ambil data dari user object
       if (user) {
+        token.id = user.id;
         token.role = user.role;
+        token.email = user.email;
+        token.subscription = user.subscription;
       }
+      
+      if (trigger === "update" || (!user && token.id)) {
+        const freshUser = await db.query.Users.findFirst({
+          where: eq(Users.id, token.id),
+        });
+        if (freshUser) {
+          token.subscription = freshUser.subscription;
+          token.role = freshUser.role;
+        }
+      }
+
       return token;
     },
 
     async session({ session, token }) {
       if (session.user) {
+        session.user.id = token.id;
         session.user.role = token.role;
+        session.user.email = token.email;
+        session.user.subscription = token.subscription;
       }
       return session;
     },

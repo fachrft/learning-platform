@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCoursesAction } from "@/actions/courses";
+import { getAverageRating } from "@/lib/utils";
 
 type RawCourse = NonNullable<
   Awaited<ReturnType<typeof getCoursesAction>>["data"]
@@ -7,11 +8,7 @@ type RawCourse = NonNullable<
 
 export function mapCourseData(c: RawCourse) {
   const students = c.course_enrollments?.length || 0;
-  const ratings = c.course_reviews?.map((r) => r.rating) || [];
-  const avgRating =
-    ratings.length > 0
-      ? ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length
-      : 0;
+  const avgRating = getAverageRating(c.course_reviews || []);
 
   let totalLessons = 0;
   if (c.chapters) {
