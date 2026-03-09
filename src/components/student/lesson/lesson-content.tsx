@@ -5,7 +5,7 @@ import { LessonQuiz } from "./lesson-quiz";
 import { LessonVideo } from "./lesson-video";
 import { LessonText } from "./lesson-text";
 import { LessonFooter } from "./lesson-footer";
-import { useLessonComplete } from "@/hooks/use-lesson-complete";
+import { useLessonComplete } from "@/hooks/lessons/use-lesson-complete";
 
 interface Props {
   courseSlug: string;
