@@ -7,6 +7,7 @@ import { LessonInput, lessonSchema } from "@/schemas/course.schema";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
+import { Lesson } from "@/types/course";
 
 export async function getLessonBySlug(slug: string) {
   try {
@@ -111,7 +112,6 @@ export async function getLessonsByChapter(chapterId: string) {
   }
 }
 
-
 export async function updateLessonAction(id: string, data: LessonInput) {
   try {
     const session = await getServerSession(authOptions);
@@ -140,7 +140,7 @@ export async function updateLessonAction(id: string, data: LessonInput) {
     }
 
     await db.transaction(async (tx) => {
-      const updateData: any = {
+      const updateData: Partial<Lesson> = {
         title,
         description,
         type,
@@ -156,7 +156,6 @@ export async function updateLessonAction(id: string, data: LessonInput) {
 
       await tx.update(Lessons).set(updateData).where(eq(Lessons.id, id));
 
-      // Handle Quizzes: Delete existing ones and re-insert new ones for simplicity in editing
       if (type === "quiz") {
         await tx.delete(Quizzes).where(eq(Quizzes.lessonId, id));
 

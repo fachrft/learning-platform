@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format, formatDistanceToNow } from "date-fns";
 import { id } from "date-fns/locale";
+import { Chapter, Course, Lesson, CourseReview } from "@/types/course";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -16,15 +17,41 @@ export function slugify(text: string) {
     .replace(/[^\w\-]+/g, "")
     .replace(/\-\-+/g, "-");
 }
-export function getAverageRating(reviews: any[]) {
+export function getAverageRating(reviews: CourseReview[]) {
   if (!reviews || reviews.length === 0) return 0;
 
   const sum = reviews.reduce((acc, curr) => {
-    const val = typeof curr === "number" ? curr : (curr?.rating ?? 0);
-    return acc + val;
+    return acc + (curr?.rating ?? 0);
   }, 0);
 
   return sum / reviews.length;
+}
+
+export function getCourseLessonsCount(course: Course): number {
+  if (!course?.chapters) return 0;
+  return course.chapters.reduce(
+    (acc: number, ch: Chapter) => acc + (ch.lessons?.length ?? 0),
+    0,
+  );
+}
+
+export function getTotalLessonsCount(courses: Course[]): number {
+  if (!courses) return 0;
+  return courses.reduce(
+    (sum: number, course: Course) => sum + getCourseLessonsCount(course),
+    0,
+  );
+}
+
+export function getCompletedLessonsCount(course: Course): number {
+  if (!course?.chapters) return 0;
+  return course.chapters.reduce(
+    (acc: number, ch: Chapter) =>
+      acc +
+      (ch.lessons?.filter((l: Lesson) => l.user_progress?.[0]?.completed)
+        .length ?? 0),
+    0,
+  );
 }
 
 export const formatRupiah = (number: number) => {

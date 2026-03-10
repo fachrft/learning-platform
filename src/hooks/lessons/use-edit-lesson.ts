@@ -11,11 +11,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { LessonInput, lessonSchema } from "@/schemas/course.schema";
 import { updateLessonAction } from "@/actions/lessons";
 
+import { Lesson, Quiz, LessonType } from "@/types/course";
+
 interface UseEditLessonProps {
   courseSlug: string;
   lessonId: string;
-  initialData: any;
-  initialQuizzes: any[];
+  initialData: Lesson | null;
+  initialQuizzes: Quiz[];
 }
 
 export function useEditLesson({
@@ -28,16 +30,27 @@ export function useEditLesson({
   const queryClient = useQueryClient();
   const [isPending, startTransition] = useTransition();
 
+  const defaultQuizzes = (initialQuizzes || []).map((q) => ({
+    question: q.question,
+    optionA: q.optionA,
+    optionB: q.optionB,
+    optionC: q.optionC,
+    optionD: q.optionD,
+    correctAnswer: q.correctAnswer,
+    points: q.points || 10,
+    sortOrder: q.sortOrder,
+  }));
+
   const form = useForm<LessonInput>({
     resolver: zodResolver(lessonSchema),
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
-      type: initialData?.type || "text",
+      type: (initialData?.type as LessonType) || "text",
       content: initialData?.content || "",
       videoUrl: initialData?.videoUrl || "",
       sortOrder: initialData?.sortOrder || 0,
-      quizzes: initialQuizzes || [],
+      quizzes: defaultQuizzes,
     },
   });
 
@@ -46,14 +59,14 @@ export function useEditLesson({
       form.reset({
         title: initialData.title || "",
         description: initialData.description || "",
-        type: initialData.type || "text",
+        type: (initialData.type as LessonType) || "text",
         content: initialData.content || "",
         videoUrl: initialData.videoUrl || "",
         sortOrder: initialData.sortOrder || 0,
-        quizzes: initialQuizzes || [],
+        quizzes: defaultQuizzes,
       });
     }
-  }, [initialData, initialQuizzes, form]);
+  }, [initialData, initialQuizzes, form, defaultQuizzes]);
 
   const selectedType = form.watch("type");
 

@@ -12,14 +12,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard,
   BookOpen,
   Users,
   CreditCard,
-  Settings,
   LogOut,
   GraduationCap,
 } from "lucide-react";

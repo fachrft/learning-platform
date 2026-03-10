@@ -3,8 +3,11 @@
 import { BookOpen, Star, FileText, CheckCircle } from "lucide-react";
 import { usePublishedCourses } from "@/hooks/courses/use-published-courses";
 import { CourseCard } from "./course-card";
-import { Course, Chapter } from "./types";
-import { getAverageRating } from "@/lib/utils";
+import {
+  getCourseLessonsCount,
+  getTotalLessonsCount,
+  getCompletedLessonsCount,
+} from "@/lib/utils";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 interface DashboardClientProps {
@@ -36,31 +39,14 @@ export function DashboardClient({ user }: DashboardClientProps) {
     );
   }
 
-  const totalLessons = courses.reduce(
-    (sum: number, c: Course) =>
-      sum +
-      c.chapters.reduce(
-        (s: number, ch: Chapter) => s + (ch.lessons?.length ?? 0),
-        0,
-      ),
-    0,
-  );
+  const totalLessons = getTotalLessonsCount(courses);
 
-  const freeCoursesCount = courses.filter((c: Course) => c.isFree).length;
+  const freeCoursesCount = (courses || []).filter((c) => c.isFree).length;
 
-  const completedCoursesCount = courses.filter((c: Course) => {
-    const tLessons = c.chapters.reduce(
-      (s: number, ch: Chapter) => s + (ch.lessons?.length ?? 0),
-      0,
-    );
+  const completedCoursesCount = (courses || []).filter((c) => {
+    const tLessons = getCourseLessonsCount(c);
     if (tLessons === 0) return false;
-    const cLessons = c.chapters.reduce(
-      (acc: number, ch: any) =>
-        acc +
-        (ch.lessons?.filter((l: any) => l.user_progress?.[0]?.completed)
-          .length ?? 0),
-      0,
-    );
+    const cLessons = getCompletedLessonsCount(c);
     return cLessons === tLessons;
   }).length;
 
@@ -155,12 +141,8 @@ export function DashboardClient({ user }: DashboardClientProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {courses.map((course: Course) => (
-              <CourseCard
-                key={course.id}
-                course={course}
-                subscription={user.subscription}
-              />
+            {courses.map((course) => (
+              <CourseCard key={course.id} course={course} />
             ))}
           </div>
         )}

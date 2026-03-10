@@ -1,8 +1,8 @@
-import { notFound, redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { notFound } from "next/navigation";
 import { CourseDetailClient } from "@/components/student/course/course-detail-client";
 import { getCourseDetailAction } from "@/actions/courses/student";
+import { Chapter } from "@/types/course";
+
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -10,7 +10,6 @@ interface Props {
 
 export default async function CourseDetailPage({ params }: Props) {
   const { slug } = await params;
-  const session = await getServerSession(authOptions);
 
   const res = await getCourseDetailAction(slug);
 
@@ -20,7 +19,7 @@ export default async function CourseDetailPage({ params }: Props) {
 
   const course = res.data;
   const totalLessons = course.chapters.reduce(
-    (acc: number, ch: any) => acc + ch.lessons.length,
+    (acc: number, ch: Chapter) => acc + ch.lessons.length,
     0,
   );
 

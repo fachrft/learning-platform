@@ -6,10 +6,12 @@ import {
 } from "@/actions/lessons/student";
 import toast from "react-hot-toast";
 
+import { Lesson } from "@/types/course";
+
 interface UseLessonCompleteProps {
   lessonId: string;
   courseSlug: string;
-  nextLesson: any | null;
+  nextLesson: Lesson | null;
   isCompleted: boolean;
   setIsRetaking: (val: boolean) => void;
 }
@@ -45,8 +47,10 @@ export const useLessonComplete = ({
       } else {
         toast.error(res.error || "Gagal mengumpulkan kuis.");
       }
-    } catch (e) {
-      toast.error("Terjadi kesalahan sistem.");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Terjadi kesalahan sistem.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -81,8 +85,10 @@ export const useLessonComplete = ({
       } else {
         toast.error(res.error || "Gagal menyimpan state. Coba lagi.");
       }
-    } catch (e) {
-      toast.error("Terjadi kesalahan sistem.");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Terjadi kesalahan sistem.",
+      );
     } finally {
       setIsSubmitting(false);
     }

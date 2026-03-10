@@ -24,7 +24,7 @@ export const Courses = pgTable("courses", {
   slug: varchar().unique(),
   status: courseStatusEnum("status").default("draft"),
   isFree: boolean().default(false),
-  sortOrder: integer().default(0),
+  sortOrder: integer().notNull().default(0),
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp().defaultNow(),
 });
@@ -37,7 +37,7 @@ export const Chapters = pgTable("chapters", {
   title: varchar().notNull(),
   description: text(),
   slug: varchar(),
-  sortOrder: integer().default(0),
+  sortOrder: integer().notNull().default(0),
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp().defaultNow(),
 });
@@ -53,7 +53,7 @@ export const Lessons = pgTable("lessons", {
   videoUrl: text(), // For video lessons
   type: lessonTypeEnum("type").default("video"),
   slug: varchar(),
-  sortOrder: integer().default(0),
+  sortOrder: integer().notNull().default(0),
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp().defaultNow(),
 });
@@ -69,8 +69,8 @@ export const Quizzes = pgTable("quizzes", {
   optionC: text().notNull(),
   optionD: text().notNull(),
   correctAnswer: varchar().notNull(), // 'A', 'B', 'C', or 'D'
-  points: integer().default(10),
-  sortOrder: integer().default(0),
+  points: integer().notNull().default(10),
+  sortOrder: integer().notNull().default(0),
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp().defaultNow(),
 });

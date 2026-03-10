@@ -20,45 +20,18 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-const getLessonTypeIcon = (type: string) => {
-  switch (type) {
-    case "video":
-      return <VideoIcon className="h-3 w-3 mr-1" />;
-    case "text":
-      return <FileText className="h-3 w-3 mr-1" />;
-    case "quiz":
-      return <HelpCircle className="h-3 w-3 mr-1" />;
-    default:
-      return <FileText className="h-3 w-3 mr-1" />;
-  }
-};
-
-const getLessonTypeLabel = (type: string) => {
-  switch (type) {
-    case "video":
-      return "Video";
-    case "text":
-      return "Teks";
-    case "quiz":
-      return "Kuis";
-    default:
-      return type;
-  }
-};
+import { Chapter, Lesson } from "@/types/course";
 
 export function ChaptersList({
   initialChapters = [],
-  courseId,
   onEditChapter,
   onDeleteChapter,
   onDeleteLesson,
 }: {
-  initialChapters: any[]; // Using any[] temporarily, we can type this better later
-  courseId: string;
-  onEditChapter?: (chapter: any) => void;
-  onDeleteChapter?: (chapter: any) => void;
-  onDeleteLesson?: (lesson: any) => void;
+  initialChapters: Chapter[];
+  onEditChapter?: (chapter: Chapter) => void;
+  onDeleteChapter?: (chapter: Chapter) => void;
+  onDeleteLesson?: (lesson: Lesson) => void;
 }) {
   const params = useParams();
 
@@ -128,7 +101,7 @@ export function ChaptersList({
           <AccordionContent className="px-4 pb-4 pt-1 border-t border-border/50 bg-muted/10 mx-2 mt-2">
             {chapter.lessons && chapter.lessons.length > 0 ? (
               <div className="space-y-2 mt-3 flex flex-col">
-                {chapter.lessons.map((lesson: any) => (
+                {chapter.lessons.map((lesson: Lesson) => (
                   <div
                     key={lesson.id}
                     className="group/lesson p-3 bg-background border rounded-lg text-sm flex items-center justify-between gap-3"

@@ -23,7 +23,7 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col h-full w-full text-center py-20">
         <DashboardHeader />
         <p className="text-destructive">
-          Gagal memuat data: {(error as any)?.message}
+          Gagal memuat data: {error?.message}
         </p>
       </div>
     );

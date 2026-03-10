@@ -1,6 +1,6 @@
 "use client";
 
-import { Course, Chapter, Lesson } from "../course/types";
+import { Course, Chapter, Lesson } from "@/types/course";
 import {
   PlayCircle,
   HelpCircle,

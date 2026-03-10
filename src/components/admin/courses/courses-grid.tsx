@@ -1,7 +1,7 @@
 import { BookOpen } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Button } from "@/components/ui/button";
-import { Course } from "./types";
+import { Course } from "@/types/course";
 import { CourseCard } from "./course-card";
 import { AddCourseCard } from "./add-course-card";
 

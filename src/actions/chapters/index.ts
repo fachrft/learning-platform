@@ -7,6 +7,7 @@ import { chapterSchema, ChapterInput } from "@/schemas/course.schema";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
+import { type Chapter } from "@/types/course";
 
 export async function getCourseBySlug(slug: string) {
   try {
@@ -81,7 +82,7 @@ export async function updateChapterAction(id: string, data: ChapterInput) {
       throw new Error(firstMessage);
     }
 
-    const { courseId, title, description, sortOrder } = parsed.data;
+    const { title, description, sortOrder } = parsed.data;
 
     const existingChapter = await db.query.Chapters.findFirst({
       where: eq(Chapters.id, id),
@@ -91,7 +92,7 @@ export async function updateChapterAction(id: string, data: ChapterInput) {
       throw new Error("Bab tidak ditemukan.");
     }
 
-    const updateData: any = {
+    const updateData: Partial<Chapter> = {
       title,
       description,
       sortOrder,

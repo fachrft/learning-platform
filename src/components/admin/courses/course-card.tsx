@@ -3,7 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BookOpen, Lock, Pencil, Star, Trash2, Users } from "lucide-react";
-import { Course, STATUS_CONFIG } from "./types";
+import { type Course, CourseStatus, STATUS_CONFIG } from "@/types/course";
+import {
+  formatDateIndo,
+  getAverageRating,
+  getCourseLessonsCount,
+} from "@/lib/utils";
 
 interface CourseCardProps {
   course: Course;
@@ -12,7 +17,11 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
-  const status = STATUS_CONFIG[course.status];
+  const currentStatus = (course.status as CourseStatus) || "draft";
+  const status = STATUS_CONFIG[currentStatus];
+  const studentsCount = course.course_enrollments?.length ?? 0;
+  const lessonsCount = getCourseLessonsCount(course);
+  const avgRating = getAverageRating(course.course_reviews || []);
 
   return (
     <Link
@@ -68,11 +77,11 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
         <div className="flex items-center gap-3 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <Users className="h-3.5 w-3.5" />
-            {course.students.toLocaleString("id-ID")}
+            {studentsCount.toLocaleString("id-ID")}
           </span>
           <span className="flex items-center gap-1">
             <BookOpen className="h-3.5 w-3.5" />
-            {course.lessons} lessons
+            {lessonsCount} {lessonsCount > 1 ? "lessons" : "lesson"}
           </span>
         </div>
       </div>
@@ -81,10 +90,12 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
       <div className="px-4 pb-4 flex items-center justify-between gap-2 border-t border-border/40 pt-3">
         {/* Rating */}
         <div className="flex items-center gap-1">
-          {course.rating > 0 ? (
+          {avgRating > 0 ? (
             <>
               <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-              <span className="text-xs font-semibold">{course.rating}</span>
+              <span className="text-xs font-semibold">
+                {avgRating.toFixed(1)}
+              </span>
             </>
           ) : (
             <span className="text-xs text-muted-foreground italic">
@@ -122,7 +133,7 @@ export function CourseCard({ course, onEdit, onDelete }: CourseCardProps) {
 
       {/* Updated at — below footer */}
       <p className="px-4 pb-3 text-[11px] text-muted-foreground -mt-1">
-        Diupdate {course.updatedAt}
+        Diupdate {formatDateIndo(course.updatedAt)}
       </p>
     </Link>
   );

@@ -4,13 +4,21 @@ import { useEffect, useRef } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 
+import { Lesson } from "@/types/course";
+
 interface LessonVideoProps {
-  lesson: any;
+  lesson: Lesson;
+}
+
+declare global {
+  interface Window {
+    videojs: typeof videojs;
+  }
 }
 
 export function LessonVideo({ lesson }: LessonVideoProps) {
   const videoContainerRef = useRef<HTMLDivElement>(null);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<ReturnType<typeof videojs> | null>(null);
 
   useEffect(() => {
     const initPlayer = async () => {
@@ -24,14 +32,18 @@ export function LessonVideo({ lesson }: LessonVideoProps) {
         "vjs-big-play-centered vjs-theme-city w-full h-full object-cover";
       videoContainerRef.current.appendChild(videoElement);
 
-      let srcObj: any = { src: lesson.videoUrl, type: "video/mp4" };
+      let srcObj = {
+        src: lesson.videoUrl as string,
+        type: "video/mp4",
+      };
       if (
-        lesson.videoUrl.includes("youtube.com") ||
-        lesson.videoUrl.includes("youtu.be")
+        lesson.videoUrl &&
+        (lesson.videoUrl.includes("youtube.com") ||
+          lesson.videoUrl.includes("youtu.be"))
       ) {
         // YouTube plugin butuh global window.videojs
         if (typeof window !== "undefined") {
-          (window as any).videojs = videojs;
+          window.videojs = videojs;
         }
         await import("videojs-youtube");
         srcObj = { src: lesson.videoUrl, type: "video/youtube" };

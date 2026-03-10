@@ -1,11 +1,16 @@
-import Imagekit from 'imagekit'
+import Imagekit from "imagekit";
 
 export const imagekit = new Imagekit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
   publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
-  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!
-})
+  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!,
+});
 
+interface FileResponse {
+  type: string;
+  url: string;
+  fileId: string;
+}
 
 export async function deleteImageKitFileByUrl(url: string | null | undefined) {
   if (!url) return;
@@ -32,9 +37,9 @@ export async function deleteImageKitFileByUrl(url: string | null | undefined) {
       return;
     }
 
-    const files = await searchResponse.json();
+    const files = (await searchResponse.json()) as FileResponse[];
     const file = files.find(
-      (f: any) => f.type === "file" && f.url && f.url.split("?")[0] === baseUrl,
+      (f) => f.type === "file" && f.url && f.url.split("?")[0] === baseUrl,
     );
     if (file && file.fileId) {
       const deleteResponse = await fetch(

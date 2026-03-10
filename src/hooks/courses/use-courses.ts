@@ -1,52 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCoursesAction } from "@/actions/courses";
-import { getAverageRating } from "@/lib/utils";
-
-type RawCourse = NonNullable<
-  Awaited<ReturnType<typeof getCoursesAction>>["data"]
->[0];
-
-export function mapCourseData(c: RawCourse) {
-  const students = c.course_enrollments?.length || 0;
-  const avgRating = getAverageRating(c.course_reviews || []);
-
-  let totalLessons = 0;
-  if (c.chapters) {
-    c.chapters.forEach((ch) => {
-      totalLessons += ch.lessons?.length || 0;
-    });
-  }
-
-  return {
-    id: c.id,
-    slug: c.slug ?? "",
-    title: c.title,
-    description: c.description,
-    students,
-    lessons: totalLessons,
-    rating: Number(avgRating.toFixed(1)),
-    isFree: c.isFree ?? false,
-    status: c.status as "published" | "draft",
-    sortOrder: c.sortOrder ?? 0,
-    thumbnail: c.thumbnail,
-    updatedAt: c.updatedAt
-      ? new Date(c.updatedAt).toLocaleDateString("id-ID", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        })
-      : "Baru saja",
-  };
-}
-
-export async function fetchCourses() {
-  const res = await getCoursesAction();
-  if (!res.success || !res.data) {
-    throw new Error(res.error || "Gagal memuat data kursus");
-  }
-
-  return res.data.map(mapCourseData);
-}
+import { Course } from "@/types/course";
 
 export function useCourses() {
   const {
@@ -54,9 +8,15 @@ export function useCourses() {
     isLoading,
     error,
     refetch,
-  } = useQuery({
+  } = useQuery<Course[]>({
     queryKey: ["admin_courses"],
-    queryFn: fetchCourses,
+    queryFn: async () => {
+      const res = await getCoursesAction();
+      if (!res.success || !res.data) {
+        throw new Error(res.error || "Gagal memuat data kursus");
+      }
+      return (res.data as Course[]) ?? [];
+    },
   });
 
   return { courses, isLoading, error: error?.message || null, refetch };

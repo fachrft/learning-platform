@@ -6,12 +6,13 @@ import { LessonVideo } from "./lesson-video";
 import { LessonText } from "./lesson-text";
 import { LessonFooter } from "./lesson-footer";
 import { useLessonComplete } from "@/hooks/lessons/use-lesson-complete";
+import { Lesson } from "@/types/course";
 
 interface Props {
   courseSlug: string;
-  lesson: any;
-  nextLesson: any | null;
-  prevLesson: any | null;
+  lesson: Lesson;
+  nextLesson: Lesson | null;
+  prevLesson: Lesson | null;
   isCompleted: boolean;
 }
 
@@ -57,7 +58,7 @@ export function LessonContent({
       <div className="flex-1 w-full max-w-4xl mx-auto p-4 md:p-8 space-y-6 pb-24">
         {isVideo && <LessonVideo lesson={lesson} />}
 
-        {isText && <LessonText content={lesson.content} />}
+        {isText && <LessonText content={lesson.content ?? ""} />}
 
         {isQuiz && (
           <LessonQuiz

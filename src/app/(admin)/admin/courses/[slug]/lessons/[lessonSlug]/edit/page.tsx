@@ -1,7 +1,7 @@
 "use client";
 
 import { use } from "react";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -15,6 +15,7 @@ import { LessonBasicInfo } from "@/components/admin/lessons/lesson-basic-info";
 import { LessonContentForm } from "@/components/admin/lessons/lesson-content-form";
 import { useQuizzesByLesson } from "@/hooks/lessons/use-quizzes-by-lesson";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Quiz } from "@/types/course";
 
 interface EditLessonPageProps {
   params: Promise<{
@@ -26,19 +27,17 @@ interface EditLessonPageProps {
 export default function EditLessonPage({ params }: EditLessonPageProps) {
   const { slug, lessonSlug } = use(params);
   const { lesson, isLoading: isFetching, error } = useLesson(lessonSlug);
-  const { quizzes, isLoading: isQuizzesLoading } = useQuizzesByLesson(lesson?.id || "");
+  const { quizzes } = useQuizzesByLesson(lesson?.id || "");
 
   const { form, isPending, selectedType, onSubmit } = useEditLesson({
     courseSlug: slug,
     lessonId: lesson?.id || "",
-    initialData: lesson,
-    initialQuizzes: quizzes || [],
+    initialData: lesson || null,
+    initialQuizzes: (quizzes as Quiz[]) || [],
   });
 
   if (isFetching) {
-    return (
-      <LoadingSpinner/>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error || !lesson) {

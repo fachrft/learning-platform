@@ -48,9 +48,9 @@ export function FaqSection() {
             <AccordionContent className="text-muted-foreground leading-relaxed pb-6 pt-2">
               Sangat cocok! Lumina dirancang untuk menyesuaikan perjalanan
               karirmu. Kami memiliki Learning Path khusus (Jalur Belajar) yang
-              dimulai dari "0" hingga level profesional. Tidak perlu pengetahuan
-              dasar sebelumnya—panduan langkah demi langkah kami akan memandu
-              Anda.
+              dimulai dari &quot;0&quot; hingga level profesional. Tidak perlu
+              pengetahuan dasar sebelumnya—panduan langkah demi langkah kami
+              akan memandu Anda.
             </AccordionContent>
           </AccordionItem>
 

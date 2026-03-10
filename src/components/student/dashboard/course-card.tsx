@@ -1,30 +1,25 @@
 "use client";
 
 import { BookOpen, Users, Star, CheckCircle, Clock } from "lucide-react";
-import { Course } from "./types";
-import { getAverageRating } from "@/lib/utils";
+import { Course } from "@/types/course";
+import {
+  getAverageRating,
+  getCourseLessonsCount,
+  getCompletedLessonsCount,
+} from "@/lib/utils";
 import Link from "next/link";
+import Image from "next/image";
 
 interface CourseCardProps {
   course: Course;
-  subscription?: "free" | "premium";
 }
 
-export function CourseCard({ course, subscription }: CourseCardProps) {
-  const totalLessons = course.chapters.reduce(
-    (acc: number, ch) => acc + (ch.lessons?.length ?? 0),
-    0,
-  );
+export function CourseCard({ course }: CourseCardProps) {
+  const totalLessons = getCourseLessonsCount(course);
 
-  const completedLessons = course.chapters.reduce(
-    (acc: number, ch) =>
-      acc +
-      (ch.lessons?.filter((l: any) => l.user_progress?.[0]?.completed).length ??
-        0),
-    0,
-  );
+  const completedLessons = getCompletedLessonsCount(course);
 
-  const avgRating = getAverageRating(course.course_reviews as any).toFixed(1);
+  const avgRating = getAverageRating(course.course_reviews || []).toFixed(1);
   const studentCount = course.course_enrollments?.length ?? 0;
   const totalChapters = course.chapters.length;
 
@@ -36,9 +31,10 @@ export function CourseCard({ course, subscription }: CourseCardProps) {
       {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden bg-muted">
         {course.thumbnail ? (
-          <img
+          <Image
             src={course.thumbnail}
             alt={course.title}
+            fill
             className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
           />
         ) : (

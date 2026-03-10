@@ -1,6 +1,6 @@
 "use client";
 
-import { Course } from "../course/types";
+import { Course, Lesson } from "@/types/course";
 import { LessonContent } from "./lesson-content";
 import { LessonSidebar } from "./lesson-sidebar";
 import { ArrowLeft, Menu, Lock } from "lucide-react";
@@ -21,9 +21,9 @@ interface ComputedStatus {
 
 interface Props {
   course: Course;
-  currentLesson: any;
-  nextLesson: any | null;
-  prevLesson: any | null;
+  currentLesson: Lesson;
+  nextLesson: Lesson | null;
+  prevLesson: Lesson | null;
   computedStatus: ComputedStatus;
   isCurrentLocked: boolean;
   isCurrentCompleted: boolean;

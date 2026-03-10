@@ -78,8 +78,7 @@ export async function getAdminDashboardStatsAction() {
         recentTransactions,
       },
     };
-  } catch (error: any) {
-    console.error("Error fetching admin dashboard stats:", error);
-    return { success: false, error: error.message };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : "Gagal mengambil data" };
   }
 }

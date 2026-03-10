@@ -8,15 +8,16 @@ import { submitCourseReviewAction } from "@/actions/courses/student";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
+import { CourseReview } from "@/types/course";
+
 interface courseFinishedProps {
   courseSlug: string;
   courseId: string;
   courseTitle: string;
-  existingReview: any;
+  existingReview: CourseReview | null;
 }
 
 export function CourseFinishedClient({
-  courseSlug,
   courseId,
   courseTitle,
   existingReview,
@@ -42,7 +43,9 @@ export function CourseFinishedClient({
         toast.error(res.error || "Gagal mengirim ulasan.");
       }
     } catch (error) {
-      toast.error("Terjadi kesalahan sistem.");
+      toast.error(
+        error instanceof Error ? error.message : "Terjadi kesalahan sistem.",
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -2,7 +2,7 @@
 
 import { use, useState } from "react";
 import { notFound } from "next/navigation";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 import { ChaptersHeader } from "@/components/admin/chapters/chapters-header";
@@ -13,6 +13,8 @@ import { DeleteChapterAlert } from "@/components/admin/chapters/delete-chapter-a
 import { DeleteLessonAlert } from "@/components/admin/lessons/delete-lesson-alert";
 import { useChapters } from "@/hooks/chapters/use-chapters";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+
+import { type Chapter, Lesson } from "@/types/course";
 
 interface CourseManagementPageProps {
   params: Promise<{
@@ -26,9 +28,9 @@ export default function CourseManagementPage({
   const { slug } = use(params);
   const { course, isLoading, error, refetch } = useChapters(slug);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [chapterToEdit, setChapterToEdit] = useState<any | null>(null);
-  const [chapterToDelete, setChapterToDelete] = useState<any | null>(null);
-  const [lessonToDelete, setLessonToDelete] = useState<any | null>(null);
+  const [chapterToEdit, setChapterToEdit] = useState<Chapter | null>(null);
+  const [chapterToDelete, setChapterToDelete] = useState<Chapter | null>(null);
+  const [lessonToDelete, setLessonToDelete] = useState<Lesson | null>(null);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -59,10 +61,11 @@ export default function CourseManagementPage({
           <div className="space-y-4">
             <ChaptersList
               initialChapters={course.chapters}
-              courseId={course.id}
-              onEditChapter={(chapter: any) => setChapterToEdit(chapter)}
-              onDeleteChapter={(chapter: any) => setChapterToDelete(chapter)}
-              onDeleteLesson={(lesson: any) => setLessonToDelete(lesson)}
+              onEditChapter={(chapter: Chapter) => setChapterToEdit(chapter)}
+              onDeleteChapter={(chapter: Chapter) =>
+                setChapterToDelete(chapter)
+              }
+              onDeleteLesson={(lesson: Lesson) => setLessonToDelete(lesson)}
             />
           </div>
         </div>

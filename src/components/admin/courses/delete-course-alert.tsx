@@ -13,37 +13,37 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
-import { Lesson } from "@/types/course";
-import { deleteLessonAction } from "@/actions/lessons";
+import { deleteCourseAction } from "@/actions/courses";
+import { Course } from "@/types/course";
 
-interface DeleteLessonAlertProps {
+interface DeleteCourseAlertProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  lesson: Lesson | null;
+  course: Course | null;
   onSuccess: () => void;
 }
 
-export function DeleteLessonAlert({
+export function DeleteCourseAlert({
   open,
   onOpenChange,
-  lesson,
+  course,
   onSuccess,
-}: DeleteLessonAlertProps) {
+}: DeleteCourseAlertProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
-    if (!lesson) return;
+    if (!course) return;
 
-    const toastId = toast.loading("Menghapus materi...");
+    const toastId = toast.loading("Menghapus kursus...");
     startTransition(async () => {
       try {
-        const result = await deleteLessonAction(lesson.id);
+        const result = await deleteCourseAction(course.id);
         if (result?.success) {
-          toast.success("Materi berhasil dihapus!", { id: toastId });
+          toast.success("Kursus berhasil dihapus!", { id: toastId });
           onSuccess();
           onOpenChange(false);
         } else {
-          toast.error(result?.error || "Gagal menghapus materi.", {
+          toast.error(result?.error || "Gagal menghapus kursus.", {
             id: toastId,
           });
         }
@@ -56,17 +56,18 @@ export function DeleteLessonAlert({
     });
   };
 
-  if (!lesson) return null;
+  if (!course) return null;
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Hapus Materi?</AlertDialogTitle>
+          <AlertDialogTitle>Hapus Kursus?</AlertDialogTitle>
           <AlertDialogDescription>
-            Apakah Anda yakin ingin menghapus materi{" "}
-            <strong>{lesson.title}</strong>? TINDAKAN INI TIDAK DAPAT
-            DIBATALKAN.
+            Apakah Anda yakin ingin menghapus kursus{" "}
+            <strong>{course.title}</strong>? TINDAKAN INI TIDAK DAPAT
+            DIBATALKAN, dan akan menghapus semua data serta gambar terkait
+            kursus ini secara permanen dari server.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

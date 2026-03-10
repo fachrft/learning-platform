@@ -19,17 +19,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Student } from "@/types/user";
 
 interface StudentsTableProps {
-  students: {
-    id: string;
-    name: string | null;
-    email: string;
-    subscription: "free" | "premium";
-    createdAt: Date | null;
-    subscriptionEnd?: Date | null;
-    enrolledCourses: number;
-  }[];
+  students: Student[];
 }
 
 export function StudentsTable({ students }: StudentsTableProps) {

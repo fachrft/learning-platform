@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 
 import { CourseInput } from "@/schemas/course.schema";
 import { updateCourseAction } from "@/actions/courses";
-import { Course } from "@/components/admin/courses/types";
+import { Course } from "@/types/course";
 import { useCourseFormBase } from "./use-course-form-base";
 
 export function useEditCourseForm(
@@ -21,8 +21,8 @@ export function useEditCourseForm(
         title: course.title,
         description: course.description || "",
         thumbnail: course.thumbnail || "",
-        status: course.status,
-        isFree: course.isFree,
+        status: course.status || "draft",
+        isFree: course.isFree ?? false,
         sortOrder: course.sortOrder ?? 0,
       });
     }
@@ -45,7 +45,10 @@ export function useEditCourseForm(
           });
         }
       } catch (error) {
-        toast.error("Terjadi kesalahan sistem, coba lagi.", { id: toastId });
+        toast.error(
+          error instanceof Error ? error.message : "Terjadi kesalahan sistem.",
+          { id: toastId },
+        );
       }
     });
   };

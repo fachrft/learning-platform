@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getCourseDetailAction } from "@/actions/courses/student";
 import { CourseFinishedClient } from "@/components/student/course/course-finished-client";
+import { CourseReview } from "@/types/course";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -24,7 +25,7 @@ export default async function CourseFinishedPage({ params }: Props) {
 
   const course = res.data;
   const existingReview = course.course_reviews?.find(
-    (review: any) => review.userId === session.user.id,
+    (review: CourseReview) => review.userId === session.user.id,
   );
 
   return (
@@ -32,7 +33,7 @@ export default async function CourseFinishedPage({ params }: Props) {
       courseSlug={slug}
       courseId={course.id}
       courseTitle={course.title}
-      existingReview={existingReview}
+      existingReview={existingReview || null}
     />
   );
 }

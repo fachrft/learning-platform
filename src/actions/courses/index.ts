@@ -8,6 +8,7 @@ import { slugify } from "@/lib/utils";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { deleteImageKitFileByUrl } from "@/lib/imagekit";
+import { Course } from "@/types/course";
 
 export async function getCoursesAction() {
   try {
@@ -101,7 +102,7 @@ export async function updateCourseAction(id: string, data: CourseInput) {
         console.error,
       );
     }
-    const updateData: any = {
+    const updateData: Partial<Course> = {
       title,
       description,
       thumbnail,

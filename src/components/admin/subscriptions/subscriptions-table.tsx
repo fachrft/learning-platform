@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { formatRupiah } from "@/lib/utils";
+import { Transaction } from "@/types/transaction";
 import {
   Table,
   TableBody,
@@ -14,18 +15,7 @@ import {
 } from "@/components/ui/table";
 
 interface SubscriptionsTableProps {
-  transactions: {
-    id: string;
-    orderId: string;
-    plan: "monthly" | "yearly";
-    amount: number;
-    status: "pending" | "paid" | "failed" | "expired";
-    createdAt: Date;
-    user: {
-      name: string;
-      email: string;
-    };
-  }[];
+  transactions: Transaction[];
 }
 
 export function SubscriptionsTable({ transactions }: SubscriptionsTableProps) {
@@ -112,9 +102,11 @@ export function SubscriptionsTable({ transactions }: SubscriptionsTableProps) {
                       {transaction.orderId}
                     </TableCell>
                     <TableCell>
-                      <div className="font-medium">{transaction.user.name}</div>
+                      <div className="font-medium">
+                        {transaction.user?.name || "No name"}
+                      </div>
                       <div className="text-muted-foreground text-xs">
-                        {transaction.user.email}
+                        {transaction.user?.email || "No email"}
                       </div>
                     </TableCell>
                     <TableCell className="capitalize">
@@ -125,13 +117,15 @@ export function SubscriptionsTable({ transactions }: SubscriptionsTableProps) {
                     </TableCell>
                     <TableCell>{getStatusBadge(transaction.status)}</TableCell>
                     <TableCell className="text-muted-foreground text-xs">
-                      {format(
-                        new Date(transaction.createdAt),
-                        "dd MMM yyyy, HH:mm",
-                        {
-                          locale: id,
-                        },
-                      )}
+                      {transaction.createdAt
+                        ? format(
+                            new Date(transaction.createdAt),
+                            "dd MMM yyyy, HH:mm",
+                            {
+                              locale: id,
+                            },
+                          )
+                        : "-"}
                     </TableCell>
                   </TableRow>
                 ))

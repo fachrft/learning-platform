@@ -5,6 +5,7 @@ import { SubscriptionsHeader } from "@/components/admin/subscriptions/subscripti
 import { SubscriptionsStats } from "@/components/admin/subscriptions/subscriptions-stats";
 import { SubscriptionsTable } from "@/components/admin/subscriptions/subscriptions-table";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Transaction } from "@/types/transaction";
 
 export default function AdminSubscriptionPage() {
   const { transactions, stats, isLoading, isError, error } =
@@ -23,18 +24,16 @@ export default function AdminSubscriptionPage() {
     return (
       <div className="flex flex-col h-full w-full text-center py-20">
         <SubscriptionsHeader />
-        <p className="text-destructive">
-          Gagal memuat data: {(error as any)?.message}
-        </p>
+        <p className="text-destructive">Gagal memuat data: {error?.message}</p>
       </div>
     );
   }
 
-  const totalPaid = (transactions as any[]).filter(
-    (t: any) => t.status === "paid",
+  const totalPaid = transactions.filter(
+    (t: Transaction) => t.status === "paid",
   ).length;
-  const totalPending = (transactions as any[]).filter(
-    (t: any) => t.status === "pending",
+  const totalPending = transactions.filter(
+    (t: Transaction) => t.status === "pending",
   ).length;
 
   return (
@@ -48,7 +47,7 @@ export default function AdminSubscriptionPage() {
           totalPending={totalPending}
         />
 
-        <SubscriptionsTable transactions={transactions as any} />
+        <SubscriptionsTable transactions={transactions} />
       </div>
     </div>
   );

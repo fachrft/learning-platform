@@ -23,21 +23,17 @@ export default function AdminStudentPage() {
     return (
       <div className="flex flex-col h-full w-full text-center py-20">
         <StudentsHeader />
-        <p className="text-destructive">
-          Gagal memuat data: {(error as any)?.message}
-        </p>
+        <p className="text-destructive">Gagal memuat data: {error?.message}</p>
       </div>
     );
   }
 
-  const typedStudents = students as any[];
-
-  const totalStudents = typedStudents.length;
-  const totalPremium = typedStudents.filter(
+  const totalStudents = students.length;
+  const totalPremium = students.filter(
     (s) => s.subscription === "premium",
   ).length;
 
-  const newThisMonth = typedStudents.filter((s) => {
+  const newThisMonth = students.filter((s) => {
     if (!s.createdAt) return false;
     return isThisMonth(new Date(s.createdAt));
   }).length;
@@ -53,7 +49,7 @@ export default function AdminStudentPage() {
           newThisMonth={newThisMonth}
         />
 
-        <StudentsTable students={typedStudents} />
+        <StudentsTable students={students} />
       </div>
     </div>
   );

@@ -5,15 +5,16 @@ import {
   getAdminPaymentTransactionsAction,
   getAdminRevenueStatsAction,
 } from "@/actions/payments/admin";
+import { Transaction } from "@/types/transaction";
 
 export function useAdminSubscriptions() {
-  const transactionsQuery = useQuery({
+  const transactionsQuery = useQuery<Transaction[]>({
     queryKey: ["admin-transactions"],
     queryFn: async () => {
       const res = await getAdminPaymentTransactionsAction();
       if (!res.success)
         throw new Error(res.error || "Failed to fetch transactions");
-      return res.data || [];
+      return (res.data as Transaction[]) || [];
     },
   });
 

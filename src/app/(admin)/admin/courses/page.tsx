@@ -8,19 +8,8 @@ import { CoursesFilters } from "@/components/admin/courses/courses-filters";
 import { CoursesGrid } from "@/components/admin/courses/courses-grid";
 import { CreateCourseDialog } from "@/components/admin/courses/create-course-dialog";
 import { EditCourseDialog } from "@/components/admin/courses/edit-course-dialog";
-import { Course } from "@/components/admin/courses/types";
-import { deleteCourseAction } from "@/actions/courses";
-import toast from "react-hot-toast";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { Course } from "@/types/course";
+import { DeleteCourseAlert } from "@/components/admin/courses/delete-course-alert";
 
 export default function AdminCoursesPage() {
   const [search, setSearch] = useState("");
@@ -39,7 +28,10 @@ export default function AdminCoursesPage() {
   });
 
   const totalPublished = courses.filter((c) => c.status === "published").length;
-  const totalStudents = courses.reduce((acc, c) => acc + c.students, 0);
+  const totalStudents = courses.reduce(
+    (acc, c) => acc + (c.course_enrollments?.length ?? 0),
+    0,
+  );
 
   const handleResetFilters = () => {
     setSearch("");
@@ -53,26 +45,6 @@ export default function AdminCoursesPage() {
 
   const handleDeleteClick = (course: Course) => {
     setCourseToDelete(course);
-  };
-
-  const confirmDeleteCourse = async () => {
-    if (!courseToDelete) return;
-    const toastId = toast.loading("Menghapus kursus...");
-    try {
-      const result = await deleteCourseAction(courseToDelete.id);
-      if (result?.success) {
-        toast.success("Kursus berhasil dihapus", { id: toastId });
-        refetch();
-      } else {
-        toast.error(result?.error || "Gagal menghapus kursus.", {
-          id: toastId,
-        });
-      }
-    } catch (err) {
-      toast.error("Terjadi kesalahan.", { id: toastId });
-    } finally {
-      setCourseToDelete(null);
-    }
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -123,31 +95,12 @@ export default function AdminCoursesPage() {
         course={editingCourse}
       />
 
-      <AlertDialog
+      <DeleteCourseAlert
         open={!!courseToDelete}
         onOpenChange={(open) => !open && setCourseToDelete(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Hapus Kursus</AlertDialogTitle>
-            <AlertDialogDescription>
-              Apakah Anda yakin ingin menghapus kursus &quot;
-              {courseToDelete?.title}&quot;? Tindakan ini tidak dapat dibatalkan
-              dan akan menghapus gambar serta data terkait kursus ini dari
-              server.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDeleteCourse}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Hapus
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        course={courseToDelete}
+        onSuccess={() => refetch()}
+      />
     </div>
   );
 }

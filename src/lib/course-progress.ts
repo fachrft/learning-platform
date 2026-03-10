@@ -1,4 +1,9 @@
-export function getLessonAccessState(chapters: any[], userProgress: any[]) {
+import { Chapter, LessonProgress } from "@/types/course";
+
+export function getLessonAccessState(
+  chapters: Chapter[],
+  userProgress: LessonProgress[],
+) {
   let previousCompleted = true;
   const computedStatus: Record<
     string,
@@ -6,7 +11,7 @@ export function getLessonAccessState(chapters: any[], userProgress: any[]) {
   > = {};
 
   chapters.forEach((chapter) => {
-    chapter.lessons.forEach((lesson: any) => {
+    chapter.lessons.forEach((lesson) => {
       const isCompleted = userProgress.some(
         (p) => p.lessonId === lesson.id && p.completed,
       );

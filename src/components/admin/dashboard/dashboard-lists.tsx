@@ -1,11 +1,25 @@
 "use client";
 
-import { Users, BookOpen } from "lucide-react";
 import { formatTimeAgo } from "@/lib/utils";
 
 interface DashboardListsProps {
-  recentStudents: any[];
-  recentTransactions: any[];
+  recentStudents: {
+    id: string;
+    name: string | null;
+    email: string;
+    createdAt: Date | null;
+  }[];
+  recentTransactions: {
+    id: string;
+    amount: number;
+    orderId: string;
+    paidAt: Date | null;
+    createdAt: Date | null;
+    user: {
+      name: string | null;
+      email: string | null;
+    } | null;
+  }[];
 }
 
 export function DashboardLists({

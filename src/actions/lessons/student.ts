@@ -13,6 +13,7 @@ import { eq, asc, desc, inArray, and } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import crypto from "crypto";
+import { Lesson, LessonProgress } from "@/types/course";
 
 export async function getLessonPageDataAction(
   courseSlug: string,
@@ -55,7 +56,7 @@ export async function getLessonPageDataAction(
       throw new Error("PremiumRequired");
     }
 
-    const currentLesson = await db.query.Lessons.findFirst({
+    const lessonData = await db.query.Lessons.findFirst({
       where: eq(Lessons.slug, lessonSlug),
       with: {
         quizzes: {
@@ -69,15 +70,28 @@ export async function getLessonPageDataAction(
       },
     });
 
-    if (!currentLesson) {
+    if (!lessonData) {
       throw new Error("Lesson tidak ditemukan");
     }
 
-    const lessonIds = course.chapters.flatMap((ch: any) =>
-      ch.lessons.map((l: any) => l.id),
+    const currentLesson: Lesson = {
+      ...lessonData,
+      quizzes: (lessonData.quizzes || []).map((q) => ({
+        ...q,
+        correctAnswer: q.correctAnswer as "A" | "B" | "C" | "D",
+        points: q.points || 10,
+      })),
+      quiz_attempts: (lessonData.quiz_attempts || []).map((a) => ({
+        ...a,
+        answers: a.answers as Record<string, string> | null,
+      })),
+    };
+
+    const lessonIds = course.chapters.flatMap((ch) =>
+      ch.lessons.map((l) => l.id),
     );
 
-    let userProgress: any[] = [];
+    let userProgress: LessonProgress[] = [];
     if (lessonIds.length > 0) {
       userProgress = await db.query.UserProgress.findMany({
         where: and(
@@ -89,8 +103,8 @@ export async function getLessonPageDataAction(
 
     let nextLesson = null;
     let prevLesson = null;
-    const allLessonsFlat = course.chapters.flatMap((ch: any) =>
-      ch.lessons.map((l: any) => ({ ...l, chapterSlug: ch.slug })),
+    const allLessonsFlat = course.chapters.flatMap((ch) =>
+      ch.lessons.map((l) => ({ ...l, chapterSlug: ch.slug })),
     );
 
     for (let i = 0; i < allLessonsFlat.length; i++) {

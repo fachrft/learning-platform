@@ -14,11 +14,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
 import { deleteChapterAction } from "@/actions/chapters";
+import { Chapter } from "@/types/course";
 
 interface DeleteChapterAlertProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  chapter: any;
+  chapter: Chapter | null;
   onSuccess: () => void;
 }
 
@@ -45,7 +46,10 @@ export function DeleteChapterAlert({
           toast.error(result?.error || "Gagal menghapus bab.", { id: toastId });
         }
       } catch (error) {
-        toast.error("Terjadi kesalahan sistem.", { id: toastId });
+        toast.error(
+          error instanceof Error ? error.message : "Terjadi kesalahan sistem.",
+          { id: toastId },
+        );
       }
     });
   };

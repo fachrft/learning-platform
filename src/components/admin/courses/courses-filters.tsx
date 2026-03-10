@@ -1,7 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { STATUS_FILTERS } from "./types";
+import { STATUS_FILTERS } from "@/types/course";
 import { Input } from "@/components/ui/input";
 
 interface CoursesFiltersProps {

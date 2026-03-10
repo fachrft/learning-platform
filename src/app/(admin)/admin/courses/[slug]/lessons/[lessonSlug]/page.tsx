@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, use } from "react";
-import { ArrowLeft, FileText, Video, HelpCircle, Loader2 } from "lucide-react";
+import { ArrowLeft, FileText, Video, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import videojs from "video.js";
@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useLesson } from "@/hooks/lessons/use-lesson";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+
+import { type Quiz } from "@/types/course";
 
 interface ViewLessonPageProps {
   params: Promise<{
@@ -25,13 +27,21 @@ export default function ViewLessonPage({ params }: ViewLessonPageProps) {
   const { lesson, isLoading, error } = useLesson(lessonSlug);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<ReturnType<typeof videojs> | null>(null);
+
+  interface VideoSource {
+    src: string;
+    type: string;
+  }
 
   useEffect(() => {
     const initPlayer = async () => {
       if (lesson?.type === "video" && videoRef.current) {
         if (!playerRef.current) {
-          let srcObj: any = { src: lesson.videoUrl, type: "video/mp4" };
+          let srcObj: VideoSource = {
+            src: lesson.videoUrl || "",
+            type: "video/mp4",
+          };
 
           if (
             lesson.videoUrl &&
@@ -114,8 +124,8 @@ export default function ViewLessonPage({ params }: ViewLessonPageProps) {
       case "quiz":
         return (
           <div className="space-y-6">
-            {(lesson as any).quizzes && (lesson as any).quizzes.length > 0 ? (
-              (lesson as any).quizzes.map((q: any, index: number) => (
+            {lesson.quizzes && lesson.quizzes.length > 0 ? (
+              lesson.quizzes.map((q: Quiz, index: number) => (
                 <div
                   key={q.id}
                   className="bg-card border rounded-xl overflow-hidden shadow-sm"

@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { HelpCircle } from "lucide-react";
+import { Lesson, Quiz, QuizAttempt } from "@/types/course";
 
 interface LessonQuizProps {
-  lesson: any;
-  latestAttempt: any;
+  lesson: Lesson;
+  latestAttempt: QuizAttempt | null;
   answers: Record<string, string>;
   setAnswers: (answers: Record<string, string>) => void;
   isRetaking: boolean;
@@ -60,7 +61,7 @@ export function LessonQuiz({
       )}
 
       {lesson.quizzes && lesson.quizzes.length > 0 ? (
-        lesson.quizzes.map((q: any, index: number) => (
+        lesson.quizzes.map((q: Quiz, index: number) => (
           <div
             key={q.id}
             className="bg-card border rounded-2xl p-6 md:p-8 shadow-sm"

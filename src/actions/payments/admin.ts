@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { PaymentTransactions, Subscriptions, Users } from "@/db/schema";
+import { PaymentTransactions, Subscriptions } from "@/db/schema";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { desc, eq, sql } from "drizzle-orm";

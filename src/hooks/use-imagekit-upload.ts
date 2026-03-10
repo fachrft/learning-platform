@@ -27,7 +27,7 @@ export function useImageKitUpload() {
       formData.append("expire", authData.expire.toString());
       formData.append("token", authData.token);
       formData.append("fileName", file.name);
-      formData.append("folder", "/courses"); 
+      formData.append("folder", "/courses");
 
       return new Promise<string>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -49,7 +49,7 @@ export function useImageKitUpload() {
         xhr.onload = () => {
           if (xhr.status === 200) {
             const response = JSON.parse(xhr.responseText);
-            resolve(response.url); 
+            resolve(response.url);
           } else {
             console.error(xhr.responseText);
             const err = "Upload gagal : " + xhr.statusText;
@@ -68,8 +68,10 @@ export function useImageKitUpload() {
 
         xhr.send(formData);
       });
-    } catch (err: any) {
-      setError(err?.message || "Terjadi kesalahan upload.");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "Terjadi kesalahan upload.",
+      );
       setIsUploading(false);
       throw err;
     }

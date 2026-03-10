@@ -3,19 +3,10 @@
 import { Star, User } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-
-interface Review {
-  id: string;
-  rating: number;
-  comment: string | null;
-  createdAt: Date | string;
-  user: {
-    name: string | null;
-  };
-}
+import { CourseReview } from "@/types/course";
 
 interface CourseReviewListProps {
-  reviews: Review[];
+  reviews: CourseReview[];
 }
 
 export function CourseReviewList({ reviews }: CourseReviewListProps) {
@@ -82,9 +73,11 @@ export function CourseReviewList({ reviews }: CourseReviewListProps) {
                     {review.user?.name || "Anonim"}
                   </div>
                   <div className="text-[10px] text-muted-foreground">
-                    {format(new Date(review.createdAt), "dd MMMM yyyy", {
-                      locale: id,
-                    })}
+                    {review.createdAt
+                      ? format(new Date(review.createdAt), "dd MMMM yyyy", {
+                          locale: id,
+                        })
+                      : "-"}
                   </div>
                 </div>
               </div>
@@ -105,7 +98,7 @@ export function CourseReviewList({ reviews }: CourseReviewListProps) {
 
             {review.comment && (
               <p className="text-sm text-foreground/80 leading-relaxed italic">
-                "{review.comment}"
+                &quot;{review.comment}&quot;
               </p>
             )}
           </div>

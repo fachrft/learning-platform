@@ -12,7 +12,7 @@ import {
   Crown,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Course } from "./types";
+import { Course, Lesson } from "@/types/course";
 import { getAverageRating } from "@/lib/utils";
 
 import { useRouter } from "next/navigation";
@@ -34,14 +34,14 @@ export function CourseHero({
   const router = useRouter();
   const [isEnrolling, setIsEnrolling] = useState(false);
 
-  const avgRating = getAverageRating(course.course_reviews as any).toFixed(1);
+  const avgRating = getAverageRating(course.course_reviews || []).toFixed(1);
   const studentCount = course.course_enrollments?.length ?? 0;
 
   const completedLessons = course.chapters.reduce(
     (acc: number, ch) =>
       acc +
-      (ch.lessons?.filter((l: any) => l.user_progress?.[0]?.completed).length ??
-        0),
+      (ch.lessons?.filter((l: Lesson) => l.user_progress?.[0]?.completed)
+        .length ?? 0),
     0,
   );
 
@@ -64,7 +64,9 @@ export function CourseHero({
       const firstLessonUrl = `/course/${course.slug}/chapter/${course.chapters[0].slug}/lesson/${course.chapters[0].lessons[0].slug}`;
       router.push(firstLessonUrl);
     } catch (error) {
-      toast.error("Gagal memulai kursus.");
+      toast.error(
+        error instanceof Error ? error.message : "Gagal memulai kursus.",
+      );
     } finally {
       setIsEnrolling(false);
     }

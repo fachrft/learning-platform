@@ -3,15 +3,16 @@
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Lesson, QuizAttempt } from "@/types/course";
 
 interface LessonFooterProps {
   courseSlug: string;
-  lesson: any;
-  nextLesson: any | null;
-  prevLesson: any | null;
+  lesson: Lesson;
+  nextLesson: Lesson | null;
+  prevLesson: Lesson | null;
   isCompleted: boolean;
   isQuiz: boolean;
-  latestAttempt: any;
+  latestAttempt: QuizAttempt | null;
   isRetaking: boolean;
   answers: Record<string, string>;
   isSubmitting: boolean;

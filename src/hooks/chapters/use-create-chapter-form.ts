@@ -27,14 +27,17 @@ export function useCreateChapterForm(onSuccess: () => void, courseId: string) {
       try {
         const result = await createChaptersAction(data);
         if (result?.success) {
-          toast.success("Chapter berhasil dibuat!",  { id: toastId });
+          toast.success("Chapter berhasil dibuat!", { id: toastId });
           form.reset();
           onSuccess();
         } else {
-          toast.error(result?.error || "Gagal membuat bab",  { id: toastId });
+          toast.error(result?.error || "Gagal membuat bab", { id: toastId });
         }
       } catch (error) {
-        toast.error("Terjadi kesalahan.");
+        toast.error(
+          error instanceof Error ? error.message : "Terjadi kesalahan sistem.",
+          { id: toastId },
+        );
       }
     });
   };

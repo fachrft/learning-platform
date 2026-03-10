@@ -34,7 +34,10 @@ export function useRegisterForm() {
           toast.error(result?.error || "Gagal mendaftar.", { id: toastId });
         }
       } catch (error) {
-        toast.error("Terjadi kesalahan, coba lagi.", { id: toastId });
+        toast.error(
+          error instanceof Error ? error.message : "Terjadi kesalahan sistem.",
+          { id: toastId },
+        );
       }
     });
   }

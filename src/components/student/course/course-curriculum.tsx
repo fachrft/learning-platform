@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Lesson, Chapter } from "./types";
+import { type Lesson, Chapter } from "@/types/course";
 
 interface CourseCurriculumProps {
   chapters: Chapter[];

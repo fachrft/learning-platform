@@ -8,7 +8,7 @@ export default async function LessonPage({
 }: {
   params: Promise<{ slug: string; chapterSlug: string; lessonSlug: string }>;
 }) {
-  const { slug, chapterSlug, lessonSlug } = await params;
+  const { slug, lessonSlug } = await params;
 
   const res = await getLessonPageDataAction(slug, lessonSlug);
 

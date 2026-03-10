@@ -23,10 +23,12 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { useEditChapterForm } from "@/hooks/chapters/use-edit-chapter-form";
 
+import { Chapter } from "@/types/course";
+
 interface EditChapterDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  chapter: any; // We'll type this fully later
+  chapter: Chapter | null;
 }
 
 export function EditChapterDialog({
@@ -36,7 +38,12 @@ export function EditChapterDialog({
 }: EditChapterDialogProps) {
   const { form, onSubmit, isPending } = useEditChapterForm(
     () => onOpenChange(false),
-    chapter,
+    {
+      courseId: chapter?.courseId || "",
+      title: chapter?.title || "",
+      description: chapter?.description || undefined,
+      sortOrder: chapter?.sortOrder || 0,
+    },
   );
 
   useEffect(() => {
