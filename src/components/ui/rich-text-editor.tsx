@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useReducer } from "react";
+import { useRef, useState, useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -93,10 +93,8 @@ function ToolbarBtn({
               "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground",
             className,
           )}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onClick();
-          }}
+          onMouseDown={(e) => e.preventDefault()}
+          onPressedChange={() => onClick()}
         >
           {children}
         </Toggle>
@@ -123,8 +121,6 @@ export function RichTextEditor({
   const [linkUrl, setLinkUrl] = useState("");
   const [linkPopoverOpen, setLinkPopoverOpen] = useState(false);
 
-  const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
-
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -137,11 +133,6 @@ export function RichTextEditor({
     ],
     content: value,
     immediatelyRender: false,
-    onTransaction() {
-      // Re-render toolbar on every editor state change
-      // (selection move, mark toggle, etc.) so isActive() stays accurate
-      forceUpdate();
-    },
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },

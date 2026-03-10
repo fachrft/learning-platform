@@ -28,31 +28,35 @@ export default function ViewLessonPage({ params }: ViewLessonPageProps) {
   const playerRef = useRef<any>(null);
 
   useEffect(() => {
-    if (lesson?.type === "video" && videoRef.current) {
-      if (!playerRef.current) {
-        let srcObj: any = { src: lesson.videoUrl, type: "video/mp4" };
+    const initPlayer = async () => {
+      if (lesson?.type === "video" && videoRef.current) {
+        if (!playerRef.current) {
+          let srcObj: any = { src: lesson.videoUrl, type: "video/mp4" };
 
-        if (
-          lesson.videoUrl &&
-          (lesson.videoUrl.includes("youtube.com") ||
-            lesson.videoUrl.includes("youtu.be"))
-        ) {
-          require("videojs-youtube");
-          srcObj = { src: lesson.videoUrl, type: "video/youtube" };
+          if (
+            lesson.videoUrl &&
+            (lesson.videoUrl.includes("youtube.com") ||
+              lesson.videoUrl.includes("youtu.be"))
+          ) {
+            await import("videojs-youtube");
+            srcObj = { src: lesson.videoUrl, type: "video/youtube" };
+          }
+
+          playerRef.current = videojs(videoRef.current, {
+            controls: true,
+            fluid: true,
+            responsive: true,
+            sources: [srcObj],
+            youtube: {
+              ytControls: 0,
+              iv_load_policy: 3,
+            },
+          });
         }
-
-        playerRef.current = videojs(videoRef.current, {
-          controls: true,
-          fluid: true,
-          responsive: true,
-          sources: [srcObj],
-          youtube: {
-            ytControls: 0,
-            iv_load_policy: 3,
-          },
-        });
       }
-    }
+    };
+
+    initPlayer();
 
     return () => {
       if (playerRef.current && !playerRef.current.isDisposed()) {
@@ -63,9 +67,7 @@ export default function ViewLessonPage({ params }: ViewLessonPageProps) {
   }, [lesson?.type, lesson?.videoUrl]);
 
   if (isLoading) {
-    return (
-      <LoadingSpinner/>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error || !lesson) {

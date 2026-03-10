@@ -9,6 +9,7 @@ import {
   PlayCircle,
   Star,
   Users,
+  Crown,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Course } from "./types";
@@ -22,16 +23,37 @@ import toast from "react-hot-toast";
 interface CourseHeroProps {
   course: Course;
   totalLessons: number;
+  isLocked?: boolean;
 }
 
-export function CourseHero({ course, totalLessons }: CourseHeroProps) {
+export function CourseHero({
+  course,
+  totalLessons,
+  isLocked,
+}: CourseHeroProps) {
   const router = useRouter();
   const [isEnrolling, setIsEnrolling] = useState(false);
 
   const avgRating = getAverageRating(course.course_reviews as any).toFixed(1);
   const studentCount = course.course_enrollments?.length ?? 0;
 
+  const completedLessons = course.chapters.reduce(
+    (acc: number, ch) =>
+      acc +
+      (ch.lessons?.filter((l: any) => l.user_progress?.[0]?.completed).length ??
+        0),
+    0,
+  );
+
+  const progressPercentage =
+    totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
   const handleEnrollAndStart = async () => {
+    if (isLocked) {
+      router.push("/dashboard/paket");
+      return;
+    }
+
     if (!course.chapters[0]?.lessons[0]) return;
 
     setIsEnrolling(true);
@@ -121,6 +143,28 @@ export function CourseHero({ course, totalLessons }: CourseHeroProps) {
               </span>
             </div>
 
+            {/* Progress Bar */}
+            {!isLocked && (
+              <div className="w-full max-w-sm mt-1 mb-2">
+                <div className="flex items-center justify-between text-xs font-semibold mb-1.5">
+                  <span className="text-muted-foreground">
+                    Progress Belajar
+                  </span>
+                  <span className="text-primary">{progressPercentage}%</span>
+                </div>
+                <div className="h-2 w-full bg-muted/50 overflow-hidden rounded-full border border-border/50">
+                  <div
+                    className="h-full bg-primary rounded-full transition-all duration-700 ease-out"
+                    style={{ width: `${progressPercentage}%` }}
+                  />
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-2 font-medium">
+                  {completedLessons} dari {totalLessons} materi telah
+                  diselesaikan
+                </p>
+              </div>
+            )}
+
             {/* CTA Tombol - Langsung Mulai Belajar */}
             {course.chapters[0]?.lessons[0] ? (
               <button
@@ -130,10 +174,16 @@ export function CourseHero({ course, totalLessons }: CourseHeroProps) {
               >
                 {isEnrolling ? (
                   <span className="animate-spin mr-1">⏳</span>
+                ) : isLocked ? (
+                  <Crown className="w-4 h-4" />
                 ) : (
                   <PlayCircle className="w-4 h-4" />
                 )}
-                Mulai Belajar
+                {isLocked
+                  ? "Beralih ke Premium"
+                  : progressPercentage > 0
+                    ? "Lanjutkan Belajar"
+                    : "Mulai Belajar"}
               </button>
             ) : (
               <p className="text-xs text-muted-foreground mt-2">

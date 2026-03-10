@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "react-hot-toast";
 import { QueryProvider } from "@/components/query-provider";
+import { AuthProvider } from "@/components/auth-provider";
 import Script from "next/script";
 
 const manrope = Manrope({
@@ -34,8 +35,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <main className="flex-1">{children}</main>
-            <Toaster />
+            <AuthProvider>
+              <main className="flex-1">{children}</main>
+              <Toaster />
+            </AuthProvider>
           </QueryProvider>
         </ThemeProvider>
 

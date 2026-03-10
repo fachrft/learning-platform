@@ -101,17 +101,9 @@ export function CourseCard({ course, subscription }: CourseCardProps) {
         </div>
 
         {/* CTA */}
-        <Link
-          href={
-            subscription === "premium" && !course.isFree
-              ? `/course/${course.slug}`
-              : `/dashboard/paket`
-          }
-        >
+        <Link href={`/course/${course.slug}`}>
           <button className="w-full py-2 px-4 rounded-lg text-xs font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
-            {subscription === "premium" && !course.isFree
-              ? "Lihat Detail"
-              : "Beli Sekarang"}
+            Lihat Detail
           </button>
         </Link>
       </div>

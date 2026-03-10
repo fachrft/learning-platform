@@ -27,32 +27,11 @@ export function LessonQuizForm({ form }: LessonQuizFormProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between border-b pb-4">
-        <div>
-          <h3 className="text-base font-semibold">Daftar Pertanyaan</h3>
-          <p className="text-xs text-muted-foreground">
-            Tambahkan soal kuis pilihan ganda di sini.
-          </p>
-        </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            append({
-              question: "",
-              optionA: "",
-              optionB: "",
-              optionC: "",
-              optionD: "",
-              correctAnswer: "A",
-              points: 10,
-              sortOrder: fields.length,
-            });
-          }}
-        >
-          Tambah Pertanyaan
-        </Button>
+      <div className="border-b pb-4">
+        <h3 className="text-base font-semibold">Daftar Pertanyaan</h3>
+        <p className="text-xs text-muted-foreground">
+          Tambahkan soal kuis pilihan ganda di sini.
+        </p>
       </div>
 
       <div className="space-y-6">
@@ -81,7 +60,11 @@ export function LessonQuizForm({ form }: LessonQuizFormProps) {
                       Pertanyaan {index + 1}
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Masukkan soal kuis..." {...field} />
+                      <Input
+                        placeholder="Masukkan soal kuis..."
+                        {...field}
+                        autoComplete="off"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -119,6 +102,7 @@ export function LessonQuizForm({ form }: LessonQuizFormProps) {
                               placeholder={`Opsi ${opt}`}
                               className="h-8 text-sm"
                               {...field}
+                              autoComplete="off"
                             />
                           </FormControl>
                         </div>
@@ -203,6 +187,28 @@ export function LessonQuizForm({ form }: LessonQuizFormProps) {
               Tambah sekarang
             </Button>
           </div>
+        )}
+
+        {fields.length > 0 && (
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full border-dashed py-6 font-semibold text-muted-foreground hover:text-foreground hover:border-primary/50 bg-muted/30 hover:bg-muted/50 transition-all"
+            onClick={() => {
+              append({
+                question: "",
+                optionA: "",
+                optionB: "",
+                optionC: "",
+                optionD: "",
+                correctAnswer: "A",
+                points: 10,
+                sortOrder: fields.length,
+              });
+            }}
+          >
+            + Tambah Pertanyaan Lagi
+          </Button>
         )}
       </div>
     </div>

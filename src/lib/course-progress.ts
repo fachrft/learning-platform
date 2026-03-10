@@ -1,5 +1,5 @@
 export function getLessonAccessState(chapters: any[], userProgress: any[]) {
-  let previousCompleted = true; // Lesson pertama selalu kebuka
+  let previousCompleted = true;
   const computedStatus: Record<
     string,
     { isLocked: boolean; isCompleted: boolean }
@@ -16,7 +16,6 @@ export function getLessonAccessState(chapters: any[], userProgress: any[]) {
         isCompleted,
       };
 
-      // Untuk lesson berikutnya, apakah file current lesson ini sudah komplit?
       previousCompleted = isCompleted;
     });
   });

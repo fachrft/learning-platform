@@ -43,7 +43,7 @@ export function LessonSidebar({
         </h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto w-full">
+      <div className="flex-1 overflow-y-auto w-full scrollbar-hide">
         {course.chapters.map((chapter: Chapter, index: number) => (
           <div key={chapter.id} className="border-b border-border/50 pb-2">
             <div className="p-4 bg-muted/10 sticky top-0 z-10 backdrop-blur-sm">

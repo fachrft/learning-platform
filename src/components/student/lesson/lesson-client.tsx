@@ -21,7 +21,7 @@ interface ComputedStatus {
 
 interface Props {
   course: Course;
-  currentLesson: any; // full details (content, videoUrl)
+  currentLesson: any;
   nextLesson: any | null;
   prevLesson: any | null;
   computedStatus: ComputedStatus;

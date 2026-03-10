@@ -61,6 +61,9 @@ export async function getPublishedCoursesAction() {
 
 export async function getCourseDetailAction(slug: string) {
   try {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
     const course = await db.query.Courses.findFirst({
       where: eq(Courses.slug, slug),
       with: {
@@ -85,6 +88,15 @@ export async function getCourseDetailAction(slug: string) {
                 type: true,
                 slug: true,
                 sortOrder: true,
+              },
+              with: {
+                ...(userId
+                  ? {
+                      user_progress: {
+                        where: eq(UserProgress.userId, userId),
+                      },
+                    }
+                  : {}),
               },
             },
           },

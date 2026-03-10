@@ -1,6 +1,6 @@
 "use client";
 
-import { PlayCircle, HelpCircle, FileText } from "lucide-react";
+import { PlayCircle, HelpCircle, FileText, Lock } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -11,9 +11,12 @@ import { Lesson, Chapter } from "./types";
 
 interface CourseCurriculumProps {
   chapters: Chapter[];
+  isLocked?: boolean;
 }
 
-const lessonTypeIcon = (type: Lesson["type"]) => {
+const lessonTypeIcon = (type: Lesson["type"], isLocked?: boolean) => {
+  if (isLocked)
+    return <Lock className="w-3.5 h-3.5 text-muted-foreground/70" />;
   if (type === "video")
     return <PlayCircle className="w-3.5 h-3.5 text-primary/70" />;
   if (type === "quiz")
@@ -21,7 +24,10 @@ const lessonTypeIcon = (type: Lesson["type"]) => {
   return <FileText className="w-3.5 h-3.5 text-muted-foreground/70" />;
 };
 
-export function CourseCurriculum({ chapters }: CourseCurriculumProps) {
+export function CourseCurriculum({
+  chapters,
+  isLocked,
+}: CourseCurriculumProps) {
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
       <h2 className="text-lg font-bold text-foreground mb-6">
@@ -33,56 +39,77 @@ export function CourseCurriculum({ chapters }: CourseCurriculumProps) {
           Belum ada chapter yang tersedia.
         </div>
       ) : (
-        <Accordion
-          type="multiple"
-          defaultValue={[chapters[0]?.id]}
-          className="space-y-3"
-        >
-          {chapters.map((chapter, idx) => (
-            <AccordionItem
-              key={chapter.id}
-              value={chapter.id}
-              className="border border-border rounded-xl overflow-hidden bg-card px-0"
-            >
-              <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors">
-                <div className="flex items-center gap-3 text-left">
-                  <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center shrink-0">
-                    {idx + 1}
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">
-                      {chapter.title}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {chapter.lessons.length} lesson
-                    </p>
+        <div className="relative">
+          <Accordion
+            type="multiple"
+            defaultValue={[chapters[0]?.id]}
+            className={`space-y-3 ${isLocked ? "pointer-events-none select-none" : ""}`}
+          >
+            {chapters.map((chapter, idx) => (
+              <AccordionItem
+                key={chapter.id}
+                value={chapter.id}
+                className="border border-border rounded-xl overflow-hidden bg-card px-0"
+              >
+                <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-muted/30 transition-colors">
+                  <div className="flex items-center gap-3 text-left">
+                    <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center shrink-0">
+                      {idx + 1}
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">
+                        {chapter.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {chapter.lessons.length} lesson
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </AccordionTrigger>
+                </AccordionTrigger>
 
-              <AccordionContent className="px-5 pb-4 pt-0">
-                {chapter.lessons.length === 0 ? (
-                  <p className="text-xs text-muted-foreground py-3">
-                    Belum ada lesson di chapter ini.
-                  </p>
-                ) : (
-                  <ul className="space-y-1 mt-2">
-                    {chapter.lessons.map((lesson) => (
-                      <li key={lesson.id}>
-                        <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg">
-                          {lessonTypeIcon(lesson.type)}
-                          <span className="text-sm text-foreground flex-1">
-                            {lesson.title}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+                <AccordionContent className="px-5 pb-4 pt-0">
+                  {chapter.lessons.length === 0 ? (
+                    <p className="text-xs text-muted-foreground py-3">
+                      Belum ada lesson di chapter ini.
+                    </p>
+                  ) : (
+                    <ul className="space-y-1 mt-2">
+                      {chapter.lessons.map((lesson) => (
+                        <li key={lesson.id}>
+                          <div
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${isLocked ? "opacity-60 cursor-not-allowed" : ""}`}
+                          >
+                            {lessonTypeIcon(lesson.type, isLocked)}
+                            <span className="text-sm text-foreground flex-1">
+                              {lesson.title}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+
+          {isLocked && (
+            <div className="absolute inset-0 z-10 backdrop-blur-[2px] bg-background/30 flex items-center justify-center rounded-xl border border-border/50">
+              <div className="bg-card p-6 rounded-2xl border border-border/80 shadow-xl text-center max-w-sm flex flex-col items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Lock className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="font-semibold text-foreground text-lg">
+                  Konten Premium
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Akses materi dibatasi. Beralih ke Premium untuk melihat semua
+                  kurikulum dan mulai belajar.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

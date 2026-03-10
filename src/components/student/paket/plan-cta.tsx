@@ -7,7 +7,6 @@ import { Plan, PlanId } from "./types";
 import { createTransactionAction } from "@/actions/payments/create-transaction";
 import toast from "react-hot-toast";
 
-// Buat typescript ngga komplain soal window.snap
 declare global {
   interface Window {
     snap: any;

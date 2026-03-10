@@ -19,11 +19,6 @@ export default async function CourseDetailPage({ params }: Props) {
   }
 
   const course = res.data;
-  const isPremium = session?.user?.subscription === "premium";
-
-  if (!isPremium && !course.isFree) {
-    redirect("/dashboard/paket");
-  }
   const totalLessons = course.chapters.reduce(
     (acc: number, ch: any) => acc + ch.lessons.length,
     0,
