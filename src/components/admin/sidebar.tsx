@@ -48,11 +48,6 @@ const navItems = [
     href: "/admin/subscriptions",
     icon: CreditCard,
   },
-  {
-    label: "Pengaturan",
-    href: "/admin/settings",
-    icon: Settings,
-  },
 ];
 
 export function AdminSidebar() {

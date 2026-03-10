@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { Users } from "@/db/schema/users";
 import { CourseEnrollments } from "@/db/schema/courses";
+import { Subscriptions } from "@/db/schema/payments";
 import { eq, desc, count } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -22,10 +23,12 @@ export async function getAdminStudentsAction() {
         email: Users.email,
         subscription: Users.subscription,
         createdAt: Users.createdAt,
+        subscriptionEnd: Subscriptions.currentPeriodEnd,
         enrolledCourses: count(CourseEnrollments.courseId),
       })
       .from(Users)
       .leftJoin(CourseEnrollments, eq(Users.id, CourseEnrollments.userId))
+      .leftJoin(Subscriptions, eq(Users.id, Subscriptions.userId))
       .where(eq(Users.role, "student"))
       .groupBy(
         Users.id,
@@ -33,6 +36,7 @@ export async function getAdminStudentsAction() {
         Users.email,
         Users.subscription,
         Users.createdAt,
+        Subscriptions.currentPeriodEnd,
       )
       .orderBy(desc(Users.createdAt));
 

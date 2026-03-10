@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { DashboardClient } from "@/components/student/dashboard/dashboard-client";
 
 export const metadata = {
-  title: "Dashboard | Seefluencer",
+  title: "Dashboard | Lumina",
   description: "Explore and learn from the best courses.",
 };
 

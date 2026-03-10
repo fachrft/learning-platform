@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { Search } from "lucide-react";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
+import { formatDateIndo } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -28,6 +27,7 @@ interface StudentsTableProps {
     email: string;
     subscription: "free" | "premium";
     createdAt: Date | null;
+    subscriptionEnd?: Date | null;
     enrolledCourses: number;
   }[];
 }
@@ -70,7 +70,7 @@ export function StudentsTable({ students }: StudentsTableProps) {
         <div>
           <h3 className="font-semibold text-lg">Direktori Siswa</h3>
           <p className="text-sm text-muted-foreground">
-            Kelola pengguna yang mendaftar di SeeFluencer.
+            Kelola pengguna yang mendaftar di Lumina
           </p>
         </div>
 
@@ -109,6 +109,9 @@ export function StudentsTable({ students }: StudentsTableProps) {
               <TableRow>
                 <TableHead className="font-medium">User / Siswa</TableHead>
                 <TableHead className="font-medium">Langganan</TableHead>
+                <TableHead className="font-medium text-xs">
+                  Berakhir Pada
+                </TableHead>
                 <TableHead className="font-medium">Jumlah Kursus</TableHead>
                 <TableHead className="font-medium text-xs">
                   Bergabung Sejak
@@ -119,7 +122,7 @@ export function StudentsTable({ students }: StudentsTableProps) {
               {filteredStudents.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={4}
+                    colSpan={5}
                     className="h-24 text-center text-muted-foreground"
                   >
                     Pelajar tidak ditemukan.
@@ -142,6 +145,11 @@ export function StudentsTable({ students }: StudentsTableProps) {
                     <TableCell className="capitalize">
                       {getSubscriptionBadge(student.subscription)}
                     </TableCell>
+                    <TableCell className="text-muted-foreground text-xs">
+                      {student.subscription === "premium"
+                        ? formatDateIndo(student.subscriptionEnd)
+                        : "-"}
+                    </TableCell>
                     <TableCell className="font-medium">
                       {student.enrolledCourses}{" "}
                       <span className="text-muted-foreground font-normal">
@@ -149,11 +157,7 @@ export function StudentsTable({ students }: StudentsTableProps) {
                       </span>
                     </TableCell>
                     <TableCell className="text-muted-foreground text-xs">
-                      {student.createdAt
-                        ? format(new Date(student.createdAt), "dd MMM yyyy", {
-                            locale: id,
-                          })
-                        : "-"}
+                      {formatDateIndo(student.createdAt)}
                     </TableCell>
                   </TableRow>
                 ))

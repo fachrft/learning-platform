@@ -1,8 +1,7 @@
 "use client";
 
 import { Users, BookOpen } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { id } from "date-fns/locale";
+import { formatTimeAgo } from "@/lib/utils";
 
 interface DashboardListsProps {
   recentStudents: any[];
@@ -53,12 +52,7 @@ export function DashboardLists({
                 </div>
                 {/* Time */}
                 <span className="text-xs text-muted-foreground whitespace-nowrap">
-                  {s.createdAt
-                    ? formatDistanceToNow(new Date(s.createdAt), {
-                        addSuffix: true,
-                        locale: id,
-                      })
-                    : ""}
+                  {formatTimeAgo(s.createdAt)}
                 </span>
               </div>
             ))
@@ -107,12 +101,7 @@ export function DashboardLists({
                 </div>
                 {/* Time */}
                 <span className="text-xs text-muted-foreground whitespace-nowrap">
-                  {t.paidAt || t.createdAt
-                    ? formatDistanceToNow(new Date(t.paidAt || t.createdAt), {
-                        addSuffix: true,
-                        locale: id,
-                      })
-                    : ""}
+                  {formatTimeAgo(t.paidAt || t.createdAt)}
                 </span>
               </div>
             ))

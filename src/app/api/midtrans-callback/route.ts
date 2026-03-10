@@ -135,7 +135,7 @@ export async function POST(req: Request) {
         if (user?.email) {
           await sendPremiumWelcomeEmail({
             to: user.email,
-            name: user.name ?? "Seefluencer Student",
+            name: user.name ?? "Lumina Student",
             plan: transaction.plan,
             expiryDate,
           });

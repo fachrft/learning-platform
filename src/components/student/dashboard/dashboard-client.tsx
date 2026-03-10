@@ -3,9 +3,9 @@
 import { BookOpen, Star, FileText, CheckCircle } from "lucide-react";
 import { usePublishedCourses } from "@/hooks/courses/use-published-courses";
 import { CourseCard } from "./course-card";
-import { DashboardSkeleton } from "./dashboard-skeleton";
 import { Course, Chapter } from "./types";
 import { getAverageRating } from "@/lib/utils";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 interface DashboardClientProps {
   user: {
@@ -18,7 +18,7 @@ interface DashboardClientProps {
 export function DashboardClient({ user }: DashboardClientProps) {
   const { data: courses = [], isLoading, isError } = usePublishedCourses();
 
-  if (isLoading) return <DashboardSkeleton />;
+  if (isLoading) return <LoadingSpinner />;
 
   if (isError) {
     return (

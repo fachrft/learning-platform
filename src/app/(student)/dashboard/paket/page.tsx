@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { PaketClient } from "@/components/student/paket/paket-client";
 
 export const metadata = {
-  title: "Pilih Paket | Seefluencer",
+  title: "Pilih Paket | Lumina",
   description:
     "Upgrade ke premium dan nikmati akses tak terbatas ke semua kursus.",
 };
