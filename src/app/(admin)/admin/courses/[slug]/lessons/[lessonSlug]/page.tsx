@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useLesson } from "@/hooks/lessons/use-lesson";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 interface ViewLessonPageProps {
   params: Promise<{
@@ -63,10 +64,7 @@ export default function ViewLessonPage({ params }: ViewLessonPageProps) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        <p className="text-sm text-muted-foreground mt-4">Memuat materi...</p>
-      </div>
+      <LoadingSpinner/>
     );
   }
 

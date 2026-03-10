@@ -1,4 +1,5 @@
 import { BookOpen } from "lucide-react";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Course } from "./types";
 import { CourseCard } from "./course-card";
@@ -22,16 +23,7 @@ export function CoursesGrid({
   onResetFilters,
 }: CoursesGridProps) {
   if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className="h-[340px] rounded-2xl bg-muted animate-pulse"
-          />
-        ))}
-      </div>
-    );
+    return <LoadingSpinner />;
   }
   if (courses.length === 0) {
     return (

@@ -14,6 +14,7 @@ import { LessonTypeSelection } from "@/components/admin/lessons/lesson-type-sele
 import { LessonBasicInfo } from "@/components/admin/lessons/lesson-basic-info";
 import { LessonContentForm } from "@/components/admin/lessons/lesson-content-form";
 import { useQuizzesByLesson } from "@/hooks/lessons/use-quizzes-by-lesson";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 interface EditLessonPageProps {
   params: Promise<{
@@ -36,12 +37,7 @@ export default function EditLessonPage({ params }: EditLessonPageProps) {
 
   if (isFetching) {
     return (
-      <div className="flex flex-col h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        <p className="text-sm text-muted-foreground mt-4">
-          Memuat data materi...
-        </p>
-      </div>
+      <LoadingSpinner/>
     );
   }
 
