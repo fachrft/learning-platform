@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 interface StudentNavbarProps {
@@ -23,7 +24,12 @@ interface StudentNavbarProps {
 }
 
 export function StudentNavbar({ user }: StudentNavbarProps) {
+  const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const initials = user.name
     ? user.name
@@ -58,10 +64,14 @@ export function StudentNavbar({ user }: StudentNavbarProps) {
             className="w-9 h-9 rounded-lg border border-border bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? (
-              <Sun className="w-4 h-4" />
+            {mounted ? (
+              theme === "dark" ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )
             ) : (
-              <Moon className="w-4 h-4" />
+              <div className="w-4 h-4" /> // Placeholder
             )}
           </button>
 

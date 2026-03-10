@@ -12,13 +12,9 @@ import {
   Crown,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Course, Lesson } from "@/types/course";
+import { Course } from "@/types/course";
 import { getAverageRating } from "@/lib/utils";
-
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { enrollCourseAction } from "@/actions/courses/student";
-import toast from "react-hot-toast";
+import { useEnrollCourse } from "@/hooks/courses/use-enroll-course";
 
 interface CourseHeroProps {
   course: Course;
@@ -31,46 +27,15 @@ export function CourseHero({
   totalLessons,
   isLocked,
 }: CourseHeroProps) {
-  const router = useRouter();
-  const [isEnrolling, setIsEnrolling] = useState(false);
-
   const avgRating = getAverageRating(course.course_reviews || []).toFixed(1);
   const studentCount = course.course_enrollments?.length ?? 0;
 
-  const completedLessons = course.chapters.reduce(
-    (acc: number, ch) =>
-      acc +
-      (ch.lessons?.filter((l: Lesson) => l.user_progress?.[0]?.completed)
-        .length ?? 0),
-    0,
-  );
-
-  const progressPercentage =
-    totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
-
-  const handleEnrollAndStart = async () => {
-    if (isLocked) {
-      router.push("/dashboard/paket");
-      return;
-    }
-
-    if (!course.chapters[0]?.lessons[0]) return;
-
-    setIsEnrolling(true);
-    try {
-      // Background create enrollment
-      await enrollCourseAction(course.id);
-
-      const firstLessonUrl = `/course/${course.slug}/chapter/${course.chapters[0].slug}/lesson/${course.chapters[0].lessons[0].slug}`;
-      router.push(firstLessonUrl);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Gagal memulai kursus.",
-      );
-    } finally {
-      setIsEnrolling(false);
-    }
-  };
+  const {
+    isEnrolling,
+    completedLessons,
+    progressPercentage,
+    handleEnrollAndStart,
+  } = useEnrollCourse({ course, totalLessons, isLocked });
 
   return (
     <div className="relative border-b border-border bg-card/50 overflow-hidden">
