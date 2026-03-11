@@ -57,6 +57,18 @@ docker compose exec app pnpm db:seed
 **Default Admin Credentials:**
 - **Email:** admin@gmail.com
 - **Password:** password
+### Step 5: Running Tests
+To ensure everything is working correctly, you can run the unit tests:
+
+**Using Docker (Recommended):**
+```bash
+docker compose exec app pnpm test
+```
+
+**Using Local pnpm:**
+```bash
+pnpm test
+```
 
 ---
 
