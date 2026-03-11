@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1772891494710,
-      "tag": "0000_fresh_scarecrow",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1773041560537,
-      "tag": "0001_cooing_zaladane",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1773238422841,
-      "tag": "0002_famous_hemingway",
+      "when": 1773240090828,
+      "tag": "0000_silent_epoch",
       "breakpoints": true
     }
   ]

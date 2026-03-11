@@ -1,6 +1,6 @@
 # Lumina Learning Platform
 
-A platform designed for aspiring influencers to learn and grow their skills.
+Lumina is a comprehensive Learning Management System (LMS) designed for aspiring influencers. It features robust course management, engaging curriculum delivery, and interactive learning tools to help users grow their skills effectively.
 
 ## 🚀 Getting Started Locally (Docker)
 
