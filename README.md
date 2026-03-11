@@ -70,6 +70,17 @@ docker compose exec app pnpm test
 pnpm test
 ```
 
+### Step 6: Handle Payment Webhooks
+To receive payment notifications from Midtrans during local development, you need to run the webhook proxy:
+
+```bash
+docker compose exec app pnpm webhook
+```
+*This command will start a Smee client to forward webhooks to your local server.*
+
+**Payment Simulation:**
+You can simulate payments using the [Midtrans Sandbox Simulator](https://simulator.sandbox.midtrans.com/).
+
 ---
 
 ## 💻 Tech Stack

@@ -32,7 +32,7 @@ async function main() {
 
   console.log("✅ Seed completed!");
   console.log("Admin Email: ", adminEmail);
-  console.log("Admin Pass: admin123");
+  console.log("Admin Pass: password");
 
   process.exit(0);
 }
