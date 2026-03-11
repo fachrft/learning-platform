@@ -52,8 +52,9 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
         token.email = user.email;
         token.subscription = user.subscription;
+        token.name = user.name;
       }
-      
+
       if (trigger === "update" || (!user && token.id)) {
         const freshUser = await db.query.Users.findFirst({
           where: eq(Users.id, token.id),
@@ -61,6 +62,8 @@ export const authOptions: NextAuthOptions = {
         if (freshUser) {
           token.subscription = freshUser.subscription;
           token.role = freshUser.role;
+          token.email = freshUser.email;
+          token.name = freshUser.name;
         }
       }
 
@@ -73,6 +76,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role;
         session.user.email = token.email;
         session.user.subscription = token.subscription;
+        session.user.name = token.name;
       }
       return session;
     },

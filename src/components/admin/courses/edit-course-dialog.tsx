@@ -3,7 +3,7 @@
 import { ImagePlus, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { useEditCourseForm } from "@/hooks/courses/use-edit-course-form";
-import { Course } from "./types";
+import { Course } from "@/types/course";
 import {
   Dialog,
   DialogContent,
