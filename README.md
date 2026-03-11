@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lumina Learning Platform
 
-## Getting Started
+A platform designed for aspiring influencers to learn and grow their skills.
 
-First, run the development server:
+## 🚀 Getting Started Locally (Docker)
 
+This project has been fully containerized using Docker, allowing you to run the application and the PostgreSQL database with a single command.
+
+### Prerequisites
+- Docker and Docker Compose installed on your machine.
+- Node.js & pnpm (optional, for running local commands).
+
+### Step 1: Clone & Environment Variables
+1. Clone this repository.
+2. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+3. Fill in the required variables in `.env`.
+
+**Required Environment Variables (`.env`):**
+- `DATABASE_URL`: Connection string. Use `postgresql://postgres:password@localhost:5433/lumina_db` for local development.
+- `NEXTAUTH_SECRET`: Secret phrasing for NextAuth.
+- `NEXTAUTH_URL`: `http://localhost:3000`
+### 🔑 Third-Party API Keys Setup
+To fully test the application's features (image uploads, payment gateways, and email notifications), you will need to set up sandbox/free accounts for the following services and add their keys to your `.env` file:
+
+- **Midtrans (Payment Gateway)**: 
+  1. Create a sandbox account at [Midtrans](https://midtrans.com/).
+  2. Go to **Settings > Access Keys** to find your `MIDTRANS_SERVER_KEY` and `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY`.
+- **ImageKit (Image Hosting)**:
+  1. Create a free account at [ImageKit.io](https://imagekit.io/).
+  2. Navigate to **Developer Options** in the dashboard to get your `NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY`, `IMAGEKIT_PRIVATE_KEY`, and `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT`.
+- **Resend (Email Notifications)**:
+  1. Create an account at [Resend](https://resend.com/).
+  2. Generate an API Key in the dashboard to use as `RESEND_API_KEY`.
+
+
+### Step 2: Run the Docker Containers
+Start the application and database in the background:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker compose up -d --build
+```
+*The app will be available at `http://localhost:3000`.*
+
+### Step 3: Database Migrations
+To create the necessary tables in the database, run the Drizzle migration command:
+```bash
+docker compose exec app pnpm drizzle-kit push
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Step 4: Seed Initial Data
+To populate the database with an Admin user required for the application:
+```bash
+docker compose exec app pnpm db:seed
+```
+**Default Admin Credentials:**
+- **Email:** admin@gmail.com
+- **Password:** password
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💻 Tech Stack
+- **Framework:** Next.js 15
+- **Language:** TypeScript
+- **Database ORM:** Drizzle ORM
+- **Database:** PostgreSQL
+- **Styling:** Tailwind CSS & Shadcn UI
