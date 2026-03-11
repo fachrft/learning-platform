@@ -1,6 +1,8 @@
+/** @type {import('next').NextConfig} */
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: 'standalone', // Added for Docker optimization
   images: {
     remotePatterns: [
       {
@@ -13,7 +15,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "ik.imagekit.io", // Allow ImageKit URLs
+        hostname: "ik.imagekit.io",
       },
     ],
   },
